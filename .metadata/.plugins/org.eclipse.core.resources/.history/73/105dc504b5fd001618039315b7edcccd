@@ -1,0 +1,87 @@
+#include "Mandelbrot.h"
+#include "MandelbrotMath.h"
+
+#include <iostream>
+#include <omp.h>
+#include "OmpTools.h"
+
+#include "IndiceTools_CPU.h"
+using cpu::IndiceTools;
+
+using std::cout;
+using std::endl;
+
+/*----------------------------------------------------------------------*\
+ |*			Declaration 					*|
+ \*---------------------------------------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Public			*|
+ \*-------------------------------------*/
+Mandelbrot::Mandelbrot(uint w, uint h, float dt, uint n, const DomaineMath& domaineMath) :
+		Animable_I<uchar4>(w, h, "Mandelbrot_OMP_rgba_uchar4",domaineMath), variateurAnimation(Interval<float>(0, 2 * PI), dt)
+	    {
+	    // Input
+	    this->n = n;
+
+	    // Tools
+	    this->t = 0;					// protected dans super classe Animable
+	    this->parallelPatern = ParallelPatern::OMP_MIXTE;   // protected dans super classe Animable
+
+	    // OMP
+	    cout << "\n[Damier] : OMP : nbThread = " << this->nbThread << endl; // protected dans super classe Animable
+	    }
+
+Mandelbrot::~Mandelbrot(void)
+    {
+    // rien
+    }
+/*--------------------------------------*\
+ |*		Public			*|
+ \*-------------------------------------*/
+/**
+ * Override
+ */
+void Mandelbrot::animationStep()
+    {
+    this->t = variateurAnimation.varierAndGet(); // in [0,2pi]
+    }
+/*--------------------------------------*\
+ |*		Private			*|
+ \*-------------------------------------*/
+
+/**
+ * Override (code naturel omp)
+ */
+void Damier::processForAutoOMP(uchar4* ptrTabPixels, uint w, uint h, const DomaineMath& domaineMath)
+    {
+    MandelbrotMath mandelbrotMath(n); // ici pour preparer cuda
+
+#pragma omp parallel for
+    for (int i = 0; i < h; i++)
+	{
+	for (int j = 0; j < w; j++)
+	    {
+	    // int s = i * W + j;
+	    int s = IndiceTools::toS(w, i, j);    // i[0,H[ j[0,W[  --> s[0,W*H[
+
+	    workPixel(&ptrTabPixels[s],i,j,domaineMath,&mandelbrotMath);
+	    }
+	}
+    }
+/*----------------------------------------------------------------------*\
+ |*			Implementation 					*|
+ \*---------------------------------------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Public			*|
+ \*-------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Private			*|
+ \*-------------------------------------*/
+
+/*----------------------------------------------------------------------*\
+ |*			End	 					*|
+ \*---------------------------------------------------------------------*/
+

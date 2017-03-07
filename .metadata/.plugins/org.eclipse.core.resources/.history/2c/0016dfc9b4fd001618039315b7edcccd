@@ -1,0 +1,53 @@
+#include "Mandelbrot.h"
+#include "MandelbrotMath.h"
+
+#include <iostream>
+#include <omp.h>
+#include "OmpTools.h"
+
+#include "IndiceTools_CPU.h"
+using cpu::IndiceTools;
+
+using std::cout;
+using std::endl;
+
+/*----------------------------------------------------------------------*\
+ |*			Declaration 					*|
+ \*---------------------------------------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Public			*|
+ \*-------------------------------------*/
+Mandelbrot::Mandelbrot(uint w, uint h, float dt, uint n, const DomaineMath& domaineMath) :
+		Animable_I<uchar4>(w, h, "Mandelbrot_OMP_rgba_uchar4",domaineMath), variateurAnimation(Interval<float>(0, 2 * PI), dt)
+	    {
+	    // Input
+	    this->n = n;
+
+	    // Tools
+	    this->t = 0;					// protected dans super classe Animable
+	    this->parallelPatern = ParallelPatern::OMP_MIXTE;   // protected dans super classe Animable
+
+	    // OMP
+	    cout << "\n[Damier] : OMP : nbThread = " << this->nbThread << endl; // protected dans super classe Animable
+	    }
+/*--------------------------------------*\
+ |*		Private			*|
+ \*-------------------------------------*/
+
+/*----------------------------------------------------------------------*\
+ |*			Implementation 					*|
+ \*---------------------------------------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Public			*|
+ \*-------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Private			*|
+ \*-------------------------------------*/
+
+/*----------------------------------------------------------------------*\
+ |*			End	 					*|
+ \*---------------------------------------------------------------------*/
+
