@@ -67,7 +67,7 @@ void Vague::process(uchar4* ptrDevPixels, uint w, uint h, const DomaineMath& dom
     {
     Device::lastCudaError("vague rgba uchar4 (before)"); // facultatif, for debug only, remove for release
 
-    vague<<<dg,db>>>(ptrDevPixels,w,h,t);
+    vague<<<dg,db>>>(ptrDevPixels,w,h,t); // Drivers nVidia s'occupe de transformer les types simples
 
     Device::lastCudaError("vague rgba uchar4 (after)"); // facultatif, for debug only, remove for release
     }

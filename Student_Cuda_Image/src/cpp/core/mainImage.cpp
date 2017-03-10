@@ -6,6 +6,7 @@
 #include "cudaTools.h"
 
 #include "RipplingProvider.h"
+#include "MandelbrotProvider.h"
 
 #include "Settings_GPU.h"
 #include "Viewer_GPU.h"
@@ -47,12 +48,12 @@ int mainImage(Settings& settings)
 
     GLUTImageViewers::init(settings.getArgc(), settings.getArgv()); //only once
 
-    // ImageOption : (boolean,boolean) : (isSelection,isAnimation)
-    ImageOption zoomable(true);
-    ImageOption nozoomable(false);
+    // ImageOption : (boolean,boolean) : (isSelection ,isAnimation,isOverlay,isShowHelp)
+    ImageOption zoomable(true,true,true,true);
+    ImageOption nozoomable(false,true,true,true);
 
-    Viewer<RipplingProvider> vague(nozoomable, 25, 25); // imageOption px py
-
+//     Viewer<RipplingProvider> vague(nozoomable, 25, 25); // imageOption px py
+    Viewer<MandelbrotProvider> mandelbrot(zoomable, 25, 25);
     // Common
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 

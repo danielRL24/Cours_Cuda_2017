@@ -3,8 +3,8 @@
 #include "cudaTools.h"
 #include "MathTools.h"
 
-#include "Animable_I_GPU.h"
-using namespace gpu;
+#include "Animable_I_GPU.h" 	// Changement pour GPU
+using namespace gpu;	 	// Changement pour GPU
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
