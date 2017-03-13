@@ -550,3 +550,13 @@ Caused by: java.io.FileNotFoundException: C:\Program Files\Git\mingw64\share\git
 	at java.io.FileInputStream.<init>(FileInputStream.java:93)
 	at org.eclipse.swt.graphics.ImageLoader.load(ImageLoader.java:172)
 	... 69 more
+!SESSION 2017-03-13 09:38:36.569 -----------------------------------------------
+eclipse.buildId=4.6.2.M20161124-1400
+java.version=1.8.0_121
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.cdt.core 1 0 2017-03-13 09:45:24.818
+!MESSAGE Indexed 'Student_Cuda_Image' (11 sources, 104 headers) in 0.942 sec: 2,870 declarations; 2,577 references; 92 unresolved inclusions; 28 syntax errors; 933 unresolved names (15%)
