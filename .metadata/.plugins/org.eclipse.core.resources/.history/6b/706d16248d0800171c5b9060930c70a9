@@ -39,6 +39,10 @@ Mandelbrot::Mandelbrot(const Grid& grid, uint w, uint h, int N, const DomaineMat
 	    {
 	    // Tools
 	    this->t = 0;					// protected dans super classe Animable
+	    // this->parallelPatern = ParallelPatern::OMP_MIXTE;   // protected dans super classe Animable
+
+	    // OMP
+	    // cout << "\n[Mandelbrot] : Cuda : nbThread = " << this->nbThread << endl; // protected dans super classe Animable
 	    }
 
 Mandelbrot::~Mandelbrot(void)

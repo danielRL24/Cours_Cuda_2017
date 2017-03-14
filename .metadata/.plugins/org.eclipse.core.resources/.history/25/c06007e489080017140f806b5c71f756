@@ -49,15 +49,17 @@ class MandelbrotMath
 		ptrColor->x = 0;
 		ptrColor->y = 0;
 		ptrColor->z = 0;
+		ptrColor->w = 255;
 		}
 	    else
 		{
 		float hue01 = z;
 		calibreur.calibrer(hue01);
-		ColorTools::HSB_TO_RVB(hue01, ptrColor); // update color
-		}
 
-	    ptrColor->w = 255; // opaque
+		ColorTools::HSB_TO_RVB(hue01, ptrColor); // update color
+
+		ptrColor->w = 255; // opaque
+		}
 
 	    }
 

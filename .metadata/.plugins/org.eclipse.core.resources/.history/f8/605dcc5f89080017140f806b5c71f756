@@ -5,7 +5,7 @@
 #include "cudaTools.h"
 #include "MathTools.h"
 
-// #include "cudaType_CPU.h" // Pas nécessaire
+#include "cudaType_CPU.h"
 
 #include "Variateur_GPU.h"
 #include "Animable_I_GPU.h"
