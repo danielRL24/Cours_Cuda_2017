@@ -60,11 +60,10 @@ class RayTracing: public Animable_I<uchar4>
 	float dt;
 	dim3 dg;
 	dim3 db;
-	int tabSphereLength;
+	int nbSphere;
 
 	// Tools
 	Sphere* ptrDevTabSphere;
-	Sphere* ptrDevResult;
 	size_t sizeOctet;
 
     };
