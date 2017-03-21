@@ -9,12 +9,13 @@
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="384" key="selection"/>
+		<item value="hue" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="hue"/>
 			<item value="384"/>
 			<item value="Damier"/>
 			<item value="TARGET_OBJ_PATH"/>
@@ -22,7 +23,6 @@
 			<item value="loadCudaDriver"/>
 			<item value="TIme"/>
 			<item value=";;"/>
-			<item value="249_1"/>
 		</list>
 		<list key="replacehistory">
 			<item value="WorkGPUStream"/>

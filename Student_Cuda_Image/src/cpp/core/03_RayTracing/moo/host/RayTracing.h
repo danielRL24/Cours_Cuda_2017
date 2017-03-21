@@ -43,7 +43,7 @@ class RayTracing: public Animable_I<uchar4>
 	/**
 	 * Call periodicly by the api
 	 */
-	virtual void process(Sphere* ptrDevTabSphere, uint w, uint h, const DomaineMath& domaineMath);
+	virtual void process(uchar4* ptrDevPixels, uint w, uint h, const DomaineMath& domaineMath);
 
 	/**
 	 * Call periodicly by the api
@@ -60,6 +60,7 @@ class RayTracing: public Animable_I<uchar4>
 	float dt;
 	dim3 dg;
 	dim3 db;
+	int tabSphereLength;
 
 	// Tools
 	Sphere* ptrDevTabSphere;

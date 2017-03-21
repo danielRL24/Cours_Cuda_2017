@@ -1,5 +1,9 @@
-#ifndef SRC_CPP_CORE_03_RAYTRACING_PROVIDER_RAYTRACINGPROVIDER_H_
-#define SRC_CPP_CORE_03_RAYTRACING_PROVIDER_RAYTRACINGPROVIDER_H_
+#pragma once
+
+#include "cudaTools.h"
+
+#include "Provider_I_GPU.h"
+using namespace gpu;
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -9,14 +13,22 @@
  |*		Public			*|
  \*-------------------------------------*/
 
-class RayTracingProvider
+class RayTracingProvider : public Provider_I<uchar4>
     {
     public:
-	RayTracingProvider();
-	virtual ~RayTracingProvider();
-    };
+	virtual ~RayTracingProvider()
+	    {
+	    // Rien
+	    }
 
-#endif 
+	/*--------------------------------------*\
+	 |*		Override		*|
+	 \*-------------------------------------*/
+
+	virtual Animable_I<uchar4>* createAnimable(void);
+
+	virtual Image_I* createImageGL(void);
+    };
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|

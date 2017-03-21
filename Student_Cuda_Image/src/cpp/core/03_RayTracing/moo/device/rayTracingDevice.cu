@@ -19,8 +19,6 @@ using namespace gpu;
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void raytracing(Sphere* ptrDevTabSpheres,uint w, uint h,float t);
-
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
@@ -33,9 +31,9 @@ __global__ void raytracing(Sphere* ptrDevTabSpheres,uint w, uint h,float t);
  |*		Public			*|
  \*-------------------------------------*/
 
-__global__ void raytracing(Sphere* ptrDevTabSpheres, uint w, uint h, float t)
+__global__ void raytracing(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere,int tabSphereLength)
     {
-    RayTracing raytracing = RayTracing(w, h);
+    RayTracingMath raytracingMath = RayTracingMath(ptrDevTabSphere, tabSphereLength);
 
     const int WH = w*h;
     const int TID = Indice2D::tid();
@@ -45,10 +43,10 @@ __global__ void raytracing(Sphere* ptrDevTabSpheres, uint w, uint h, float t)
     int j;
 
     int s = TID;
-    while(s < n)
+    while(s < WH)
 	{
 	IndiceTools::toIJ(s, w, &j, &j);
-	raytracingMath.colorIJ(&ptrDevTabSpheres[s], i, j, t);
+	raytracingMath.colorIJ(&ptrDevPixels[s], i, j, t);
 	s += NB_THREAD;
 	}
     }

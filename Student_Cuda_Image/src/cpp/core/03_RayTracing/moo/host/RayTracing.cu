@@ -18,7 +18,7 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __global__ void raytracing(Sphere* ptrDevTabSphere, uint w, uint h, float t);
+extern __global__ void raytracing(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere, int tabSphereLength);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -46,19 +46,15 @@ RayTracing::RayTracing(const Grid& grid, uint w, uint h, float dt, int nbSphere)
     this->dt = dt;
     this->t = 0;
     this->sizeOctet = nbSphere * sizeof(Sphere);
+    this->tabSphereLength = nbSphere;
 
-    ShereCreator sphereCreator(nbSphere, w, h); // sur la pile
-    Sphere* ptrTabSphere = sphereCreator.getTab();
+    SphereCreator sphereCreator(nbSphere, w, h); // sur la pile
+    Sphere* ptrTabSphere = sphereCreator.getTabSphere();
     // transfert to GM
     toGM(ptrTabSphere);
     // transfert to CM
-//    toCM(ptrTabSphere);
+    // toCM(ptrTabSphere);
 
-    // Grid
-	{
-	this->dg = grid.dg;
-	this->db = grid.db;
-	}
     }
 
 RayTracing::~RayTracing()
@@ -66,7 +62,6 @@ RayTracing::~RayTracing()
     //MM (device free)
     	{
     	Device::free(ptrDevTabSphere);
-    	Device::free(ptrDevResult);
 
     	Device::lastCudaError("RayTracing MM (end deallocation)"); // temp debug, facultatif
     	}
@@ -80,10 +75,8 @@ void RayTracing::toGM(Sphere* ptrTabSphere)
     {
     // MM (malloc Device)
 	{
-	Device::malloc(ptrDevTabSphere, sizeOctet);
-	Device::malloc(ptrDevResult, sizeOctet);
-	Device::memclear(ptrDevTabSphere, sizeOctet);
-	Device::memclear(ptrDevResult, sizeOctet);
+	Device::malloc(&ptrDevTabSphere, sizeOctet);
+//	Device::memclear(ptrDevTabSphere, sizeOctet);
 	}
 
     // MM (copy Host->Device)
@@ -105,10 +98,10 @@ void RayTracing::toGM(Sphere* ptrTabSphere)
  *
  * Note : domaineMath pas use car pas zoomable
  */
-void RayTracing::process(Sphere* ptrDevTabSphere, uint w, uint h, const DomaineMath& domaineMath)
+void RayTracing::process(uchar4* ptrDevPixels, uint w, uint h, const DomaineMath& domaineMath)
     {
     Device::lastCudaError("raytracing (before)"); // facultatif, for debug only, remove for release
-    raytracing<<<dg,db>>>(ptrDevTabSphere,w,h,t); // Drivers nVidia s'occupe de transformer les types simples
+    raytracing<<<dg,db>>>(ptrDevPixels,w,h,t,ptrDevTabSphere,tabSphereLength); // Drivers nVidia s'occupe de transformer les types simples
     Device::lastCudaError("raytracing (after)"); // facultatif, for debug only, remove for release
 
     // MM (Device -> Host)
