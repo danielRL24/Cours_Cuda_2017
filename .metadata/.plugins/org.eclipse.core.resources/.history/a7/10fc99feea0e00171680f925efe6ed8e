@@ -58,6 +58,8 @@ class RayTracing: public Animable_I<uchar4>
 
 	// Inputs
 	float dt;
+	dim3 dg;
+	dim3 db;
 	int nbSphere;
 
 	// Tools

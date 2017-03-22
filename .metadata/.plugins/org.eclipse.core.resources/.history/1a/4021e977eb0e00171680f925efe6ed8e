@@ -38,7 +38,7 @@ Animable_I<uchar4>* RayTracingProvider::createAnimable()
 
 
     // Sphere
-    int nbSphere = 25;
+    int nbSphere = 10;
 
     // Dimension
     int dw = 800;

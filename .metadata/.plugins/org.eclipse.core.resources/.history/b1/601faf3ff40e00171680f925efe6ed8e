@@ -84,15 +84,15 @@ class RayTracingMath
 	    xySol.x = j;
 	    xySol.y = i;
 
-//	    float distance = 0;
-//	    float closestDistance = 0;
+	    float distance = 0;
+	    float closestDistance = 0;
 	    float dz = 0;
 	    float brightness = 0;
 	    float hue = 0;
 	    float hCarre = 0;
 	    int isEnDessous = 0;
 
-//	    Sphere sphereK;
+	    Sphere sphereK;
 
 	    int k = 0;
 	    for (k = 0; k < tabSphereLength; k++)
@@ -111,6 +111,7 @@ class RayTracingMath
 
 		// Condition de sortie si une sphere est en-dessus
 		k += tabSphereLength * isEnDessous;
+
 		}
 
 	    }
