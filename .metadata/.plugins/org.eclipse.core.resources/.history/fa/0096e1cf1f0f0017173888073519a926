@@ -30,10 +30,8 @@ class RayTracingMath
 	    this->tabSphereLength = tabSphereLength;
 	    }
 
-	// constructeur copie automatique car pas pointeur dans VagueMath
-
 	__device__
-	       virtual ~RayTracingMath()
+	         virtual ~RayTracingMath()
 	    {
 	    // rien
 	    }
@@ -47,27 +45,43 @@ class RayTracingMath
 	__device__
 	void colorIJ(uchar4* ptrColor, int i, int j, float t)
 	    {
-
 	    float2 xySol;
 	    xySol.x = j;
 	    xySol.y = i;
 
-//	    int k = 0;
-//	    for(k = 0; k < tabSphereLength; k++)
-//		{
-//		Sphere sphereK = ptrTabSphere[k];
-//		float hCarre = sphereK.hCarre(xySol);
-//
-//		int color = (int) sphereK.isEnDessous(hCarre);
-//
-//		float dz = sphereK.dz(hCarre);
-//		float distance = sphereK.distance(dz) * color;
-//		float brightness = sphereK.brightness(dz) * color;
-//		float hue = (sphereK.getHueStart() + sphereK.hue(t)) * color;
-//		ColorTools::HSB_TO_RVB(hue, 1, brightness, ptrColor);
-//
-//		k += tabSphereLength * color;
-//		}
+	    float distance = 0;
+	    float closestDistance = 10000;
+	    float dz = 0;
+	    float brightness = 0;
+	    float hue = 0;
+	    float hCarre = 0;
+	    int isEnDessous = 0;
+
+	    Sphere closestSphere = ptrTabSphere[0];
+
+	    int k = 0;
+	    for (k = 0; k < tabSphereLength; k++)
+		{
+		Sphere sphereK = ptrTabSphere[k];
+		hCarre = sphereK.hCarre(xySol);
+
+		if(sphereK.isEnDessous(hCarre))
+		    {
+		    dz = sphereK.dz(hCarre);
+		    distance = sphereK.distance(dz);
+		    if(distance < closestDistance)
+			{
+			closestSphere = sphereK;
+			closestDistance = distance;
+			}
+		    }
+		}
+
+		hCarre = closestSphere.hCarre(xySol);
+		dz = closestSphere.dz(hCarre);
+		brightness = closestSphere.brightness(dz);
+		hue = closestSphere.getHueStart() + closestSphere.hue(t);
+		ColorTools::HSB_TO_RVB(hue, 1, brightness, ptrColor);
 	    }
 
 	/*--------------------------------------*\
@@ -79,7 +93,8 @@ class RayTracingMath
 	Sphere* ptrTabSphere;
 	int tabSphereLength;
 
-    };
+    }
+;
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
