@@ -57,7 +57,7 @@ RayTracing::RayTracing(const Grid& grid, uint w, uint h, float dt, int nbSphere)
     // toCM(ptrTabSphere);
 
     // Appelle le service d'upload coté device
-    uploadGPU(ptrTabSphere);
+//    uploadGPU(ptrTabSphere);
     }
 
 RayTracing::~RayTracing()

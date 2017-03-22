@@ -41,14 +41,14 @@ __constant__ float TAB_CM[LENGTH_CM];
 /**
  * Call once by the host
  */
-__host__ void uploadGPU(Sphere* ptrDevTabSphere)
-    {
-    size_t size = LENGTH_CM * sizeof(Sphere);
-    int offset = 0;
-    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
-    }
+//__host__ void uploadGPU(Sphere* ptrDevTabSphere)
+//    {
+//    size_t size = LENGTH_CM * sizeof(Sphere);
+//    int offset = 0;
+//    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
+//    }
 
-__global__ void raytracingGM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere,int tabSphereLength)
+__global__ void raytracing(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere,int tabSphereLength)
     {
     RayTracingMath raytracingMath = RayTracingMath(ptrDevTabSphere, tabSphereLength);
 
@@ -68,15 +68,15 @@ __global__ void raytracingGM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphe
 	}
     }
 
-__global__ void rayTracingCM(...)
-    {
-    // work();
-    }
-
-__global__ void rayTracingSM(...)
-    {
-    // work();
-    }
+//__global__ void rayTracingCM(...)
+//    {
+//    // work();
+//    }
+//
+//__global__ void rayTracingSM(...)
+//    {
+//    // work();
+//    }
 
 __device__ void work(uchar4* ptrDevPixels, Sphere* ptrDevTabSphere, int nbSphere, uint w, uint h, float t)
     {

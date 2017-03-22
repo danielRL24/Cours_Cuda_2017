@@ -49,33 +49,31 @@ class RayTracingMath
 	    {
 
 	    float2 xySol;
-	    xySol.x = i;
-	    xySol.y = j;
-	    for (int k = 0; k < tabSphereLength; k++)
+	    xySol.x = j;
+	    xySol.y = i;
+
+	    ptrColor->x = 0;
+	    ptrColor->y = 0;
+	    ptrColor->z = 0;
+	    ptrColor->w = 255;
+
+	    int k = 0;
+	    while(k < tabSphereLength)
 		{
-		float hCarre = ptrTabSphere[k].hCarre(xySol);
-		if (ptrTabSphere[k].isEnDessous(hCarre))
+		Sphere sphereK = ptrTabSphere[k];
+		float hCarre = sphereK.hCarre(xySol);
+		if (sphereK.isEnDessous(hCarre))
 		    {
-		    float dz = ptrTabSphere[k].dz(hCarre);
-//		    float distance = ptrTabSphere[k].distance(dz);
-		    float brightness = ptrTabSphere[k].brightness(dz);
-		    float hue = ptrTabSphere[k].hue(t);
-//		    ColorTools::HSB_TO_RVB(hue, 1, brightness, ptrColor);
+		    float dz = sphereK.dz(hCarre);
+		    float distance = sphereK.distance(dz);
+		    float brightness = sphereK.brightness(dz);
+		    float hue = sphereK.hue(t);
+		    ColorTools::HSB_TO_RVB(hue, 1, brightness, ptrColor);
 
-		    ptrColor->x = 155;
-		    ptrColor->y = 155;
-		    ptrColor->z = 155;
-		    break;
+		    k = tabSphereLength;
 		    }
-		else
-		    {
-		    ptrColor->x = 0;
-		    ptrColor->y = 0;
-		    ptrColor->z = 0;
-		    }
-		ptrColor->w = 255;
+		k++;
 		}
-
 	    }
 
 	/*--------------------------------------*\
