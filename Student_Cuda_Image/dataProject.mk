@@ -41,7 +41,6 @@ TARGET_MODE:=EXE
 #	Tip     : All files (.cpp, .h .lib, ...) will be considered recursively !
 #	Mimimum : empty
 
-
 #################
 #  API Ext 		#
 #################

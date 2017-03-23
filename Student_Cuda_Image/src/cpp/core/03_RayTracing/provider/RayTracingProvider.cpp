@@ -36,13 +36,12 @@ Animable_I<uchar4>* RayTracingProvider::createAnimable()
     // Animation;
     float dt = 2.f * PI_FLOAT / 1000;
 
-
     // Sphere
     int nbSphere = 25;
 
     // Dimension
-    int dw = 800;
-    int dh = 800;
+    int dw = 16 * 80;
+    int dh = 16 * 80;
 
     // Grid Cuda
     int mp = Device::getMPCount();
