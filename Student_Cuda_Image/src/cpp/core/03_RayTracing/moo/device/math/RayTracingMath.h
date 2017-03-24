@@ -78,7 +78,7 @@ class RayTracingMath
 		hCarre = closestSphere.hCarre(xySol);
 		dz = closestSphere.dz(hCarre);
 		brightness = closestSphere.brightness(dz);
-		hue = closestSphere.getHueStart() + closestSphere.hue(t);
+		hue = closestSphere.hue(t);
 		ColorTools::HSB_TO_RVB(hue, 1, brightness, ptrColor);
 	    }
 
