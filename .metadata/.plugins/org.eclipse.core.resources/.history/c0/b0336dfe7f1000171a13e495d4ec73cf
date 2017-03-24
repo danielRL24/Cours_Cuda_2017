@@ -54,15 +54,14 @@ int mainImage(Settings& settings)
     ImageOption nozoomable(false,true,true,true);
 
     Viewer<RipplingProvider> rippling(nozoomable, 25, 25); // imageOption px py
-    rippling.setSize(400, 400);
-    rippling.setPosition(840, 0);
     Viewer<MandelbrotProvider> mandelbrot(zoomable, 25, 25);
-    mandelbrot.setSize(400, 400);
-    mandelbrot.setPosition(420, 0);
     Viewer<RayTracingProvider> raytracing(nozoomable, 25, 25);
-    raytracing.setSize(400, 400);
+    rippling.setSize(200, 200);
+    mandelbrot.setSize(200, 200);
+    raytracing.setSize(200, 200);
+    rippling.setPosition(0, 0);
+    mandelbrot.setPosition(0, 0);
     raytracing.setPosition(0, 0);
-
     // Common
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
 

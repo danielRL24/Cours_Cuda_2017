@@ -60,8 +60,9 @@ int mainImage(Settings& settings)
     mandelbrot.setSize(400, 400);
     mandelbrot.setPosition(420, 0);
     Viewer<RayTracingProvider> raytracing(nozoomable, 25, 25);
-    raytracing.setSize(400, 400);
+
     raytracing.setPosition(0, 0);
+    raytracing.setSize(400, 400);
 
     // Common
     GLUTImageViewers::runALL(); // Bloquant, Tant qu'une fenetre est ouverte
