@@ -1,5 +1,5 @@
 #pragma once
 
-#define LENGTH_CM 2
+#define LENGTH_CM 50
 
 // Utiliser cote host et cote device !

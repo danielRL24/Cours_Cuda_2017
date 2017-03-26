@@ -1,3 +1,3 @@
-# !/bin/bash
+#!/bin/bash
 cbirt gl ./Demo.run
 

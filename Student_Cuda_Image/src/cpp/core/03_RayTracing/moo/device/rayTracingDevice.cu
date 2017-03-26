@@ -10,7 +10,7 @@
 using namespace gpu;
 
 // Déclaration constante globale
-__constant__ float TAB_CM[LENGTH_CM];
+__constant__ Sphere TAB_CM[LENGTH_CM];
 
 
 /*----------------------------------------------------------------------*\
@@ -24,7 +24,7 @@ __constant__ float TAB_CM[LENGTH_CM];
  |*		Public			*|
  \*-------------------------------------*/
 
-//__device__ void work(Sphere* ptrTabSphere, int n);
+__device__ void work(uchar4* ptrDevPixels, Sphere* ptrDevTabSphere, int nbSphere, uint w, uint h, float t, const int TID, const int NB_THREAD);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -41,50 +41,44 @@ __constant__ float TAB_CM[LENGTH_CM];
 /**
  * Call once by the host
  */
-//__host__ void uploadGPU(Sphere* ptrDevTabSphere)
-//    {
-//    size_t size = LENGTH_CM * sizeof(Sphere);
-//    int offset = 0;
-//    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
-//    }
-
-__global__ void raytracing(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere,int tabSphereLength)
+__host__ void uploadGPU(Sphere* ptrDevTabSphere)
     {
-    RayTracingMath raytracingMath = RayTracingMath(ptrDevTabSphere, tabSphereLength);
+    size_t size = LENGTH_CM * sizeof(Sphere);
+    int offset = 0;
+//    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
+    }
 
-    const int WH = w*h;
+__global__ void raytracingGM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere,int tabSphereLength)
+    {
     const int TID = Indice2D::tid();
     const int NB_THREAD = Indice2D::nbThread();
 
-    int i;
-    int j;
-
-    int s = TID;
-    while(s < WH)
-	{
-	IndiceTools::toIJ(s, w, &i, &j);
-	raytracingMath.colorIJ(&ptrDevPixels[s], i, j, t);
-	s += NB_THREAD;
-	}
+    work(ptrDevPixels, ptrDevTabSphere, tabSphereLength, w, h, t, TID, NB_THREAD);
     }
 
-//__global__ void rayTracingCM(...)
-//    {
-//    // work();
-//    }
-//
-//__global__ void rayTracingSM(...)
-//    {
-//    // work();
-//    }
+__global__ void raytracingCM(uchar4* ptrDevPixels, uint w, uint h, float t)
+    {
+    const int TID = Indice2D::tid();
+    const int NB_THREAD = Indice2D::nbThread();
 
-__device__ void work(uchar4* ptrDevPixels, Sphere* ptrDevTabSphere, int nbSphere, uint w, uint h, float t)
+    work(ptrDevPixels, TAB_CM, LENGTH_CM, w, h, t, TID, NB_THREAD);
+    }
+
+__global__ void raytracingSM(uchar4* ptrDevPixels, uint w, uint h, float t,int tabSphereLength)
+    {
+    const int TID_LOCAL = Indice2D::tidLocal();
+    const int NB_THREAD_LOCAL = Indice2D::nbThreadLocal();
+
+    extern __shared__ Sphere ptrDevTabSphereSM[];
+
+    work(ptrDevPixels, ptrDevTabSphereSM, tabSphereLength, w, h, t, TID_LOCAL, NB_THREAD_LOCAL);
+    }
+
+__device__ void work(uchar4* ptrDevPixels, Sphere* ptrDevTabSphere, int nbSphere, uint w, uint h, float t, const int TID, const int NB_THREAD)
     {
     RayTracingMath raytracingMath = RayTracingMath(ptrDevTabSphere, nbSphere);
 
     const int WH = w*h;
-    const int TID = Indice2D::tid();
-    const int NB_THREAD = Indice2D::nbThread();
 
     int i;
     int j;

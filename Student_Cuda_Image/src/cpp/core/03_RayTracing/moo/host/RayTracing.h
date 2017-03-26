@@ -34,7 +34,6 @@ class RayTracing: public Animable_I<uchar4>
     public:
 
 	void toGM(Sphere* ptrDevTabSphere);
-//	void toCM(Sphere* ptrDevTabSphere);
 
 	/*-------------------------*\
 	|*   Override Animable_I   *|

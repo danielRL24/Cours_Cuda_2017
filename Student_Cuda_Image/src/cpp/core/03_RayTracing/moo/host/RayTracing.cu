@@ -19,7 +19,11 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __global__ void raytracing(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere, int tabSphereLength);
+extern __global__ void raytracingGM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere,int tabSphereLength);
+extern __global__ void raytracingCM(uchar4* ptrDevPixels, uint w, uint h, float t);
+extern __global__ void raytracingSM(uchar4* ptrDevPixels, uint w, uint h, float t,int tabSphereLength);
+
+extern __host__ void uploadGPU(Sphere* ptrDevTabSphere);
 
 /*--------------------------------------*\
  |*		Public			*|
@@ -53,21 +57,19 @@ RayTracing::RayTracing(const Grid& grid, uint w, uint h, float dt, int nbSphere)
     Sphere* ptrTabSphere = sphereCreator.getTabSphere();
     // transfert to GM
     toGM(ptrTabSphere);
-    // transfert to CM
-    // toCM(ptrTabSphere);
 
     // Appelle le service d'upload coté device
-//    uploadGPU(ptrTabSphere);
+    uploadGPU(ptrTabSphere);
     }
 
 RayTracing::~RayTracing()
     {
     //MM (device free)
-    	{
-    	Device::free(ptrDevTabSphere);
+	{
+	Device::free(ptrDevTabSphere);
 
-    	Device::lastCudaError("RayTracing MM (end deallocation)"); // temp debug, facultatif
-    	}
+	Device::lastCudaError("RayTracing MM (end deallocation)"); // temp debug, facultatif
+	}
     }
 
 /*-------------------------*\
@@ -90,11 +92,6 @@ void RayTracing::toGM(Sphere* ptrTabSphere)
     Device::lastCudaError("RayTracing MM (end allocation)"); // temp debug, facultatif
     }
 
-//void RayTracing::toCM(Sphere* ptrTabSphere)
-//    {
-//
-//    }
-
 /**
  * Override
  * Call periodicly by the API
@@ -104,7 +101,23 @@ void RayTracing::toGM(Sphere* ptrTabSphere)
 void RayTracing::process(uchar4* ptrDevPixels, uint w, uint h, const DomaineMath& domaineMath)
     {
     Device::lastCudaError("raytracing (before)"); // facultatif, for debug only, remove for release
-    raytracing<<<dg,db>>>(ptrDevPixels,w,h,t,ptrDevTabSphere,nbSphere); // Drivers nVidia s'occupe de transformer les types simples
+
+    static int i = 0;
+
+    if (i % 3 == 0)
+	{
+	raytracingGM<<<dg,db>>>(ptrDevPixels,w,h,t,ptrDevTabSphere,nbSphere);
+	}
+    else if (i % 3 == 1)
+	{
+	raytracingCM<<<dg,db>>>(ptrDevPixels, w, h, t);
+	}
+    else if (i % 3 == 2)
+	{
+	raytracingSM<<<dg,db, sizeOctet>>>(ptrDevPixels, w, h, t, nbSphere);
+	}
+    i++;
+
     Device::lastCudaError("raytracing (after)"); // facultatif, for debug only, remove for release
     }
 
@@ -113,9 +126,9 @@ void RayTracing::process(uchar4* ptrDevPixels, uint w, uint h, const DomaineMath
  * Call periodicly by the API
  */
 void RayTracing::animationStep()
-    {
-    t += dt;
-    }
+{
+t += dt;
+}
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
