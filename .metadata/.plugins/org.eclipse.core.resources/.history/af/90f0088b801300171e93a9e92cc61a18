@@ -19,10 +19,11 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __host__ void uploadGPU(Sphere* ptrDevTabSphere);
 extern __global__ void raytracingGM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere,int tabSphereLength);
 extern __global__ void raytracingCM(uchar4* ptrDevPixels, uint w, uint h, float t);
 extern __global__ void raytracingSM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere, int tabSphereLength);
+
+extern __host__ void uploadGPU(Sphere* ptrDevTabSphere);
 
 /*--------------------------------------*\
  |*		Public			*|

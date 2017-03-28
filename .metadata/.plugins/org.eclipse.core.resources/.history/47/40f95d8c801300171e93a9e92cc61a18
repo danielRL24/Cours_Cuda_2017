@@ -24,6 +24,7 @@ extern __global__ void raytracingGM(uchar4* ptrDevPixels, uint w, uint h, float 
 extern __global__ void raytracingCM(uchar4* ptrDevPixels, uint w, uint h, float t);
 extern __global__ void raytracingSM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere, int tabSphereLength);
 
+
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/

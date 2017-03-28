@@ -93,7 +93,7 @@ __host__ void uploadGPU(Sphere* ptrDevTabSphere)
     {
     size_t size = LENGTH_CM * sizeof(Sphere);
     int offset = 0;
-//    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
+    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
     }
 
 /*--------------------------------------*\

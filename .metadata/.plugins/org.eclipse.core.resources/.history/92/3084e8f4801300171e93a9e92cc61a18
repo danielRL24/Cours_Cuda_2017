@@ -23,6 +23,8 @@ __constant__ Sphere TAB_CM[LENGTH_CM];
  |*		Public			*|
  \*-------------------------------------*/
 
+__device__ void work(uchar4* ptrDevPixels, Sphere* ptrDevTabSphere, int nbSphere, uint w, uint h, float t, const int TID, const int NB_THREAD);
+
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
@@ -34,24 +36,6 @@ __constant__ Sphere TAB_CM[LENGTH_CM];
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
-
-__device__ void work(uchar4* ptrDevPixels, Sphere* ptrDevTabSphere, int nbSphere, uint w, uint h, float t, const int TID, const int NB_THREAD)
-    {
-    RayTracingMath raytracingMath = RayTracingMath(ptrDevTabSphere, nbSphere);
-
-    const int WH = w*h;
-
-    int i;
-    int j;
-
-    int s = TID;
-    while(s < WH)
-	{
-	IndiceTools::toIJ(s, w, &i, &j);
-	raytracingMath.colorIJ(&ptrDevPixels[s], i, j, t);
-	s += NB_THREAD;
-	}
-    }
 
 __global__ void raytracingGM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere,int tabSphereLength)
     {
@@ -86,6 +70,24 @@ __global__ void raytracingSM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphe
     work(ptrDevPixels, ptrDevTabSphereSM, tabSphereLength, w, h, t, TID_LOCAL, NB_THREAD_LOCAL);
     }
 
+__device__ void work(uchar4* ptrDevPixels, Sphere* ptrDevTabSphere, int nbSphere, uint w, uint h, float t, const int TID, const int NB_THREAD)
+    {
+    RayTracingMath raytracingMath = RayTracingMath(ptrDevTabSphere, nbSphere);
+
+    const int WH = w*h;
+
+    int i;
+    int j;
+
+    int s = TID;
+    while(s < WH)
+	{
+	IndiceTools::toIJ(s, w, &i, &j);
+	raytracingMath.colorIJ(&ptrDevPixels[s], i, j, t);
+	s += NB_THREAD;
+	}
+    }
+
 /**
  * Call once by the host
  */
@@ -93,7 +95,7 @@ __host__ void uploadGPU(Sphere* ptrDevTabSphere)
     {
     size_t size = LENGTH_CM * sizeof(Sphere);
     int offset = 0;
-//    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
+    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
     }
 
 /*--------------------------------------*\

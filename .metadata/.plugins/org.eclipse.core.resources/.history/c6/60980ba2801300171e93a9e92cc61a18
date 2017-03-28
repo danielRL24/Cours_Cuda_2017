@@ -1,5 +1,7 @@
 #pragma once
 
+#include "RayTracingMath.h"
+
 #include "cudaTools.h"
 #include "MathTools.h"
 #include "Sphere.h"
