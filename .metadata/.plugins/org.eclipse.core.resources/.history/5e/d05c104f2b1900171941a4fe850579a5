@@ -1,0 +1,69 @@
+#include "Montecarlo.h"
+
+
+/*----------------------------------------------------------------------*\
+ |*			Declaration 					*|
+ \*---------------------------------------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Public			*|
+ \*-------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Private			*|
+ \*-------------------------------------*/
+
+/*----------------------------------------------------------------------*\
+ |*			Implementation 					*|
+ \*---------------------------------------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Public			*|
+ \*-------------------------------------*/
+
+Montecarlo::Montecarlo(const Grid& grid, float* ptrPiHat, float m, long n) :
+    ptrPiHat(ptrPiHat), m(m), nx(nx)
+    {
+	this->db = grid.db;
+	this->dg = grid.dg;
+	this->sizeOctetGM = sizeof(float);
+	this->sizeOctetSM = sizeof(float) * db.x * db.z * db.x;
+
+	Device::malloc(&ptrDevPiHatGM, sizeOctet);
+	Device::memclear(ptrDevPiHatGM, sizeOctet);
+
+	Device::malloc(&tabDevGeneratorGM, sizeOctetGM);
+	Device::memclear(tabDevGeneratorGM, sizeOctetGM);
+    }
+
+Montecarlo::~Montecarlo()
+    {
+    Device::free(ptrDevPiHatGM);
+    Device::free(tabDevGeneratorGM);
+    }
+
+
+void Montecarlo::run()
+    {
+    size_t sizeOfSM = sizeOctet * db.x * db.y * db.z;
+    Device::lastCudaError("addVecteur (before)"); // temp debug
+    slice<<<dg,db, sizeOctet >>>(ptrDevResult, nbSlice); // assynchrone
+    Device::lastCudaError("addVecteur (after)"); // temp debug
+
+    // Debug, facultatif (voir addVector_device.cu)
+//     Device::synchronize(); // Temp,debug, only for printf in  GPU
+
+    // MM (Device -> Host)
+	{
+	Device::memcpyDToH(ptrResult, ptrDevResult, sizeOctet); // barriere synchronisation implicite
+	}
+
+    }
+/*--------------------------------------*\
+ |*		Private			*|
+ \*-------------------------------------*/
+
+/*----------------------------------------------------------------------*\
+ |*			End	 					*|
+ \*---------------------------------------------------------------------*/
+

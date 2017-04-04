@@ -2,6 +2,7 @@
 #include "Indice2D.h"
 
 #include "IndiceTools_GPU.h"
+#include "Device.h"
 
 #include "RayTracingMath.h"
 
@@ -93,6 +94,7 @@ __host__ void uploadGPU(Sphere* ptrDevTabSphere)
     {
     size_t size = LENGTH_CM * sizeof(Sphere);
     int offset = 0;
+    Device::memcpyToCM(TAB_CM, ptrDevTabSphere, size);
 //    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
     }
 
