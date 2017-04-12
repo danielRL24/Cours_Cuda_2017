@@ -25,7 +25,7 @@ __global__ void slice(float* ptrDevGM, int nbSlice);
  \*-------------------------------------*/
 
 static __device__ void reductionIntraThread(float* ptrDevTabSM, int nbSlice);
-__device__ float fpi(float x);
+static __device__ float fpi(float x);
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cudaTools.h"
+#include "Grid.h"
 #include <curand_kernel.h>
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -29,10 +31,12 @@ class Montecarlo
 	float m;
 	float n;
 	int nbThreat;
+	int nx;
+
 	size_t sizeOctetGenerator;
 	size_t sizeOctetSM;
+
 	float* ptrPiHat;
-	int* ptrNx;
 	int* ptrDevNx;
 	curandState* tabDevGeneratorGM;
 

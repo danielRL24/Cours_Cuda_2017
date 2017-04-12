@@ -15,7 +15,7 @@
  \*-------------------------------------*/
 
 __global__ void setup_kernel_rand(curandState* tabDevGenerator, int deviceID);
-__global__ void montecarlo(int ptrDevNx, curandState* tabDevGenerator, long n, float m);
+__global__ void montecarlo(int* ptrDevNx, curandState* tabDevGenerator, long n, float m);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -45,10 +45,10 @@ __global__ void setup_kernel_rand(curandState* tabDevGenerator, int deviceId)
     int seed = 1234 + deltaSeed;
     int sequenceNumber = TID + deltaSequence;
     int offset = deltaOffset;
-    curand_init(seed, sequenceNumber, offset, &tabDevGenerator[tid]);
+    curand_init(seed, sequenceNumber, offset, &tabDevGenerator[TID]);
     }
 
-__global__ void montecarlo(int ptrDevNx, curandState* tabDevGenerator, long n, float m)
+__global__ void montecarlo(int* ptrDevNx, curandState* tabDevGenerator, long n, float m)
     {
     extern __shared__ int tabSM[];
 

@@ -28,8 +28,6 @@ bool useMontecarlo(void);
  |*		Private			*|
  \*-------------------------------------*/
 
-bool isAlgoPI_OK(float piHat, int n, string title);
-
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
  \*---------------------------------------------------------------------*/
@@ -38,11 +36,12 @@ bool isAlgoPI_OK(float piHat, int n, string title);
  |*		Public			*|
  \*-------------------------------------*/
 
-bool useSlice()
+bool useMontecarlo()
     {
 
     float piHat = 0;
-    int nbSlice = 5;
+    int m = 5;		// Taille de la cible
+    long n = 1000000; 	// Nombre de flechettes
 
     // Partie interessante GPGPU
 	{
@@ -50,39 +49,30 @@ bool useSlice()
 	int mp = Device::getMPCount();
 	int coreMP = Device::getCoreCountMP();
 
-	dim3 dg = dim3(mp, 1, 1);  		// disons, a optimiser selon le gpu, peut drastiqument ameliorer ou baisser les performances
-	dim3 db = dim3(coreMP, 1, 1);   	// disons, a optimiser selon le gpu, peut drastiqument ameliorer ou baisser les performances
+	dim3 dg = dim3(mp, 1, 1);
+	dim3 db = dim3(coreMP, 1, 1);
 	Grid grid(dg, db);
 
-	Slice slice(grid, &piHat, nbSlice);
-	slice.run();
+	Montecarlo montecarlo(grid, &piHat, m, n);
+	montecarlo.run();
 	}
 
-    bool isOk = isAlgoPI_OK(piHat, nbSlice, "PI"); // check result
+	cout << endl << "[Montecarlo running ...]" << endl;
+	cout << "n=" << n << " & m=" << m << endl;
 
-//    delete[] piHat;
+	cout.precision(8);
+	cout << "Pi hat  = " << piHat << endl;
+	cout << "Pi true = " << PI << endl;
 
-    return isOk;
+	bool isOk = MathTools::isEquals((float)piHat, (float)PI, (float)1e-6);
+	cout << "Montecarlo : isOk = " << isOk << endl;
+
+	return isOk;
     }
 
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
-
-bool isAlgoPI_OK(float piHat, int n, string title)
-    {
-    cout << endl << "[" << title << " running ...]" << endl;
-    cout << "n=" << n << endl;
-
-    cout.precision(8);
-    cout << "Pi hat  = " << piHat << endl;
-    cout << "Pi true = " << PI << endl;
-
-    bool isOk = MathTools::isEquals((float)piHat, (float)PI, (float)1e-6);
-    cout << "isOk = " << isOk << endl;
-
-    return isOk;
-    }
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|

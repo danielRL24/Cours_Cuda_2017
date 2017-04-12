@@ -2,6 +2,7 @@
 
 #include "cudaTools.h"
 #include "Grid.h"
+#include <curand_kernel.h>
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -38,7 +39,8 @@ class Slice
 
 	// Tools
 	float* ptrDevResult;
-	size_t sizeOctet;
+	size_t sizeOctetGM;
+	size_t sizeOctetSM;
 
     };
 /*----------------------------------------------------------------------*\

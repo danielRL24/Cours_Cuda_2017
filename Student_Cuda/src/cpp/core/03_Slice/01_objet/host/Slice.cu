@@ -3,6 +3,8 @@
 #include "Device.h"
 #include "Slice.h"
 
+#include <curand_kernel.h>
+
 using std::cout;
 using std::endl;
 
@@ -35,15 +37,16 @@ extern __global__ void slice(float* ptrDevGM, int nbSlice);
 Slice::Slice(const Grid& grid, float* ptrResult, int nbSlice) :
 	nbSlice(nbSlice), ptrResult(ptrResult)
     {
-    this->sizeOctet = sizeof(float); // octet
+    this->sizeOctetGM = sizeof(float);
+    this->sizeOctetSM = sizeof(float) * grid.db.x;
 
     // MM
 	{
 
 	// MM (malloc Device)
 	    {
-	    Device::malloc(&ptrDevResult, sizeOctet);
-	    Device::memclear(ptrDevResult, sizeOctet);
+	    Device::malloc(&ptrDevResult, sizeOctetGM);
+	    Device::memclear(ptrDevResult, sizeOctetGM);
 	    }
 
 	Device::lastCudaError("Slice MM (end allocation)"); // temp debug, facultatif
@@ -72,9 +75,8 @@ Slice::~Slice()
 
 void Slice::run()
     {
-    size_t sizeOfSM = sizeOctet * db.x * db.y * db.z;
     Device::lastCudaError("Slice  (before)"); // temp debug
-    slice<<<dg,db, sizeOctet >>>(ptrDevResult, nbSlice); // assynchrone
+    slice<<<dg,db, sizeOctetSM >>>(ptrDevResult, nbSlice); // assynchrone
     Device::lastCudaError("Slice  (after)"); // temp debug
 
     // Debug, facultatif (voir addVector_device.cu)
@@ -82,7 +84,7 @@ void Slice::run()
 
     // MM (Device -> Host)
 	{
-	Device::memcpyDToH(ptrResult, ptrDevResult, sizeOctet); // barriere synchronisation implicite
+	Device::memcpyDToH(ptrResult, ptrDevResult, sizeOctetGM); // barriere synchronisation implicite
 	}
 
     }
