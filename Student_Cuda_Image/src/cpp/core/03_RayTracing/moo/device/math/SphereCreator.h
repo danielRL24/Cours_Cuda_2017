@@ -18,7 +18,12 @@ class SphereCreator
 
     private:
 
-	void createSphere(void);
+	void createSphereAll(void);
+	void createSphereBack();
+	void createSphereFront();
+	void createSphereAleatoire();
+
+	int rayonMax();
 
 	/*--------------------------------------*\
 	|*	 	Attributs		*|
@@ -31,4 +36,6 @@ class SphereCreator
 	int bord;
 	// Tools
 	Sphere* tabSphere;
+	static const int ZMIN=2000;
+	static const int ZMAX=3000;
     };

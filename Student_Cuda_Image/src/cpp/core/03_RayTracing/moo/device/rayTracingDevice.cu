@@ -3,10 +3,10 @@
 
 #include "IndiceTools_GPU.h"
 #include "Device.h"
-
+#include "Sphere.h"
 #include "RayTracingMath.h"
 
-#include "../length.h"
+#include "length.h"
 
 using namespace gpu;
 // Déclaration constante globale
@@ -35,6 +35,18 @@ __constant__ Sphere TAB_CM[LENGTH_CM];
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
+
+/**
+ * Call once by the host
+ */
+__host__ void uploadToCM(Sphere* ptrDevTabSphere)
+    {
+    size_t size = LENGTH_CM * sizeof(Sphere);
+    int offset = 0;
+    Device::memcpyToCM(TAB_CM, ptrDevTabSphere, size);
+//    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
+    }
+
 
 __device__ void work(uchar4* ptrDevPixels, Sphere* ptrDevTabSphere, int nbSphere, uint w, uint h, float t, const int TID, const int NB_THREAD)
     {
@@ -85,17 +97,6 @@ __global__ void raytracingSM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphe
 	}
 
     work(ptrDevPixels, ptrDevTabSphereSM, tabSphereLength, w, h, t, TID_LOCAL, NB_THREAD_LOCAL);
-    }
-
-/**
- * Call once by the host
- */
-__host__ void uploadGPU(Sphere* ptrDevTabSphere)
-    {
-    size_t size = LENGTH_CM * sizeof(Sphere);
-    int offset = 0;
-    Device::memcpyToCM(TAB_CM, ptrDevTabSphere, size);
-//    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
     }
 
 /*--------------------------------------*\
