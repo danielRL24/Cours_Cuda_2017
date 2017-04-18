@@ -89,7 +89,7 @@ __device__ void reductionIntraThread(int* tabSM, curandState* tabDevGenerator, l
 
 __device__ float fpi(float x)
     {
-    return 4.f / (1.f + x * x);
+    return 1.f / (1.f + x * x);
     }
 
 /*----------------------------------------------------------------------*\

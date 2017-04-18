@@ -16,7 +16,7 @@ using std::endl;
  \*-------------------------------------*/
 
 extern __global__ void setup_kernel_rand(curandState* tabDevGenerator, int deviceID);
-extern __global__ void montecarlo(int ptrDevNx, curandState* tabDevGenerator, long n, float m);
+extern __global__ void montecarlo(int* ptrDevNx, curandState* tabDevGenerator, long n, float m);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -36,11 +36,9 @@ Montecarlo::Montecarlo(const Grid& grid, float* ptrPiHat, float m, long n) :
 	this->db = grid.db;
 	this->dg = grid.dg;
 	this->nbThreat = grid.threadCounts();
+	this->nx = 0;
 	this->sizeOctetGenerator = nbThreat * sizeof(curandState);
 	this->sizeOctetSM = sizeof(int) * db.x;
-
-	Device::malloc(&ptrNx, sizeof(int));
-	Device::memclear(ptrNx, sizeof(int));
 
 	Device::malloc(&ptrDevNx, sizeof(int));
 	Device::memclear(ptrDevNx, sizeof(int));
@@ -51,7 +49,6 @@ Montecarlo::Montecarlo(const Grid& grid, float* ptrPiHat, float m, long n) :
 
 Montecarlo::~Montecarlo()
     {
-    Device::free(ptrNx);
     Device::free(ptrDevNx);
     Device::free(tabDevGeneratorGM);
     }
@@ -59,17 +56,18 @@ Montecarlo::~Montecarlo()
 
 void Montecarlo::run()
     {
-    int deviceID
+    int deviceID = Device::getDeviceId();
     Device::lastCudaError("Montecarlo (before)"); // temp debug
     setup_kernel_rand<<<dg, db>>>(tabDevGeneratorGM, deviceID);
-    montecalo<<<dg, db, sizeOctetSM>>>(ptrDevNx, tabDevGeneratorGM, n, m);
+    montecarlo<<<dg, db, sizeOctetSM>>>(ptrDevNx, tabDevGeneratorGM, n, m);
     Device::lastCudaError("Montecarlo (after)"); // temp debug
 
     // Debug, facultatif (voir addVector_device.cu)
 //     Device::synchronize(); // Temp,debug, only for printf in  GPU
 
-    Device::memcpyDToH(ptrNx, ptrDevNx, sizeof(int)); // barriere synchronisation implicite
+    Device::memcpyDToH(&nx, ptrDevNx, sizeof(int)); // barriere synchronisation implicite
 
+    *ptrPiHat = ((float)nx * (float)m)/(float)n;
     }
 /*--------------------------------------*\
  |*		Private			*|

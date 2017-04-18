@@ -74,8 +74,8 @@ __device__ void reductionIntraThread(int* tabSM, curandState* tabDevGenerator, l
     int nx = 0;
     for (long i = 1; i <= n; i++)
 	{
-	xAlea = curand_uniform(&localGenerator);
-	yAlea = curand_uniform(&localGenerator) * m;
+	xAlea = curand_uniform(&localGenerator) * m;
+	yAlea = curand_uniform(&localGenerator);
 
 	nx += yAlea < fpi(xAlea);
 	}

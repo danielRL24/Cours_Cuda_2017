@@ -40,7 +40,7 @@ bool useSlice()
     {
 
     float piHat = 0;
-    int nbSlice = 50000;
+    int nbSlice = 500000;
 
     // Partie interessante GPGPU
 	{

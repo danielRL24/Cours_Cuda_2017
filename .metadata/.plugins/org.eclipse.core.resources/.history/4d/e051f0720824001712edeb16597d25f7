@@ -83,13 +83,13 @@ __device__ void reductionIntraThread(int* tabSM, curandState* tabDevGenerator, l
     //Necessaire si on veut utiliser notre generator
     // - dans d?autre kernel
     // - avec d?autres nombres aleatoires !
-    tabSM[TID_LOCAL] = nx;
+    tabSM[TID_LOCAL] = 4 * nx;
     tabDevGenerator[TID] = localGenerator;
     }
 
 __device__ float fpi(float x)
     {
-    return 4.f / (1.f + x * x);
+    return 1.f / (1.f + x * x);
     }
 
 /*----------------------------------------------------------------------*\

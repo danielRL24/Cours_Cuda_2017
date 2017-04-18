@@ -40,7 +40,7 @@ bool useMontecarlo()
     {
 
     float piHat = 0;
-    int m = 100;	// Taille de la cible
+    int m = 100;		// Taille de la cible
     long n = 50000000;	// Nombre de flechettes
 
     // Partie interessante GPGPU

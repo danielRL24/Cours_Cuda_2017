@@ -75,9 +75,12 @@ __device__ void reductionIntraThread(int* tabSM, curandState* tabDevGenerator, l
     for (long i = 1; i <= n; i++)
 	{
 	xAlea = curand_uniform(&localGenerator);
-	yAlea = curand_uniform(&localGenerator) * m;
+	yAlea = curand_uniform(&localGenerator);
 
-	nx += yAlea < fpi(xAlea);
+//	if(yAlea < fpi(xAlea))
+//	    {
+	    nx += yAlea < fpi(xAlea);
+//	    }
 	}
     //Register -> Global Memory
     //Necessaire si on veut utiliser notre generator

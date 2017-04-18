@@ -9,13 +9,13 @@
 #include "length.h"
 
 using namespace gpu;
+// Déclaration constante globale
+__constant__ Sphere TAB_CM[LENGTH_CM];
+
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
-
-// Déclaration constante globale
-__constant__ Sphere TAB_CM[LENGTH_CM];
 
 /*--------------------------------------*\
  |*		Imported	 	*|
@@ -23,6 +23,7 @@ __constant__ Sphere TAB_CM[LENGTH_CM];
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
+
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
@@ -42,7 +43,7 @@ __host__ void uploadToCM(Sphere* ptrTabSphere)
     {
     size_t size = LENGTH_CM * sizeof(Sphere);
 //    int offset = 0;
-    Device::memcpyToCM(TAB_CM, ptrTabSphere, size);
+    Device::memcpyToCM(TAB_CM, ptrDevTabSphere, size);
 //    HANDLE_ERROR(cudaMemCpyToSymbol(TAB_CM, ptrDevTabSphere, size, offset, cudaMemcpyHostToDevice));
     }
 

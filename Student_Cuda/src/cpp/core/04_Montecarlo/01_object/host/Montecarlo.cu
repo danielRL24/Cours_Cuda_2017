@@ -45,12 +45,6 @@ Montecarlo::Montecarlo(const Grid& grid, float* ptrPiHat, float m, long n) :
 
 	Device::malloc(&tabDevGeneratorGM, sizeOctetGenerator);
 	Device::memclear(tabDevGeneratorGM, sizeOctetGenerator);
-
-
-	int deviceID = Device::getDeviceId();
-
-
-	setup_kernel_rand<<<dg, db>>>(tabDevGeneratorGM, deviceID);
     }
 
 Montecarlo::~Montecarlo()
@@ -62,7 +56,9 @@ Montecarlo::~Montecarlo()
 
 void Montecarlo::run()
     {
+    int deviceID = Device::getDeviceId();
     Device::lastCudaError("Montecarlo (before)"); // temp debug
+    setup_kernel_rand<<<dg, db>>>(tabDevGeneratorGM, deviceID);
     montecarlo<<<dg, db, sizeOctetSM>>>(ptrDevNx, tabDevGeneratorGM, n, m);
     Device::lastCudaError("Montecarlo (after)"); // temp debug
 
@@ -71,7 +67,7 @@ void Montecarlo::run()
 
     Device::memcpyDToH(&nx, ptrDevNx, sizeof(int)); // barriere synchronisation implicite
 
-    *ptrPiHat = ((float)nx * (float)m)/(float)n;
+    *ptrPiHat = ((float)nx/(float)n) * (float)m;
     }
 /*--------------------------------------*\
  |*		Private			*|

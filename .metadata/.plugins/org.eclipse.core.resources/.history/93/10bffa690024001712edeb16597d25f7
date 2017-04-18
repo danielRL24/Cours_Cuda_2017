@@ -9,13 +9,13 @@
 #include "length.h"
 
 using namespace gpu;
+// Déclaration constante globale
+__constant__ Sphere TAB_CM[LENGTH_CM];
+
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
  \*---------------------------------------------------------------------*/
-
-// Déclaration constante globale
-__constant__ Sphere TAB_CM[LENGTH_CM];
 
 /*--------------------------------------*\
  |*		Imported	 	*|
@@ -23,6 +23,7 @@ __constant__ Sphere TAB_CM[LENGTH_CM];
 /*--------------------------------------*\
  |*		Public			*|
  \*-------------------------------------*/
+
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/

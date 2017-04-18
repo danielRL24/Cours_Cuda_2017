@@ -40,7 +40,7 @@ bool useMontecarlo()
     {
 
     float piHat = 0;
-    int m = 100;	// Taille de la cible
+    int m = 10;		// Taille de la cible
     long n = 50000000;	// Nombre de flechettes
 
     // Partie interessante GPGPU
@@ -64,7 +64,7 @@ bool useMontecarlo()
 	cout << "Pi hat  = " << piHat << endl;
 	cout << "Pi true = " << PI << endl;
 
-	bool isOk = MathTools::isEquals((float)piHat, (float)PI, (float)1e-6);
+	bool isOk = MathTools::isEquals(piHat, PI, 1e-6);
 	cout << "Montecarlo : isOk = " << isOk << endl;
 
 	return isOk;

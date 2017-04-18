@@ -19,7 +19,7 @@ using std::endl;
  |*		Imported	 	*|
  \*-------------------------------------*/
 
-extern __host__ void uploadToCM(Sphere* ptrTabSphere);
+extern __host__ void uploadToCM(Sphere* ptrDevTabSphere);
 extern __global__ void raytracingGM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere,int tabSphereLength);
 extern __global__ void raytracingCM(uchar4* ptrDevPixels, uint w, uint h, float t);
 extern __global__ void raytracingSM(uchar4* ptrDevPixels, uint w, uint h, float t, Sphere* ptrDevTabSphere, int tabSphereLength);
@@ -58,7 +58,7 @@ RayTracing::RayTracing(const Grid& grid, uint w, uint h, float dt, int nbSphere)
     toGM(ptrTabSphere);
 
     // Appelle le service d'upload coté device
-    uploadToCM(ptrTabSphere);
+    uploadToCM(ptrDevTabSphere);
     }
 
 RayTracing::~RayTracing()
