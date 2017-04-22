@@ -16,7 +16,7 @@ using std::endl;
  \*-------------------------------------*/
 
 extern __global__ void setup_kernel_rand(curandState* tabDevGenerator, int deviceID);
-extern __global__ void montecarlo(int* ptrDevNx, curandState* tabDevGenerator, long n, float m);
+extern __global__ void montecarlo(long* ptrDevNx, curandState* tabDevGenerator, long n, float m);
 
 /*--------------------------------------*\
  |*		Private			*|
@@ -30,18 +30,19 @@ extern __global__ void montecarlo(int* ptrDevNx, curandState* tabDevGenerator, l
  |*		Public			*|
  \*-------------------------------------*/
 
-Montecarlo::Montecarlo(const Grid& grid, float* ptrPiHat, float m, long n) :
-    ptrPiHat(ptrPiHat), m(m), n(n)
+Montecarlo::Montecarlo(const Grid& grid, int m, long n) :
+	M(m), n(n)
     {
 	this->db = grid.db;
 	this->dg = grid.dg;
 	this->nbThreat = grid.threadCounts();
 	this->nx = 0;
+	this->piHat = 0;
 	this->sizeOctetGenerator = nbThreat * sizeof(curandState);
-	this->sizeOctetSM = sizeof(int) * db.x;
+	this->sizeOctetSM = sizeof(long) * db.x;
 
-	Device::malloc(&ptrDevNx, sizeof(int));
-	Device::memclear(ptrDevNx, sizeof(int));
+	Device::malloc(&ptrDevNx, sizeof(long));
+	Device::memclear(ptrDevNx, sizeof(long));
 
 	Device::malloc(&tabDevGeneratorGM, sizeOctetGenerator);
 	Device::memclear(tabDevGeneratorGM, sizeOctetGenerator);
@@ -59,15 +60,22 @@ void Montecarlo::run()
     int deviceID = Device::getDeviceId();
     Device::lastCudaError("Montecarlo (before)"); // temp debug
     setup_kernel_rand<<<dg, db>>>(tabDevGeneratorGM, deviceID);
-    montecarlo<<<dg, db, sizeOctetSM>>>(ptrDevNx, tabDevGeneratorGM, n, m);
+    montecarlo<<<dg, db, sizeOctetSM>>>(ptrDevNx, tabDevGeneratorGM, n, M);
     Device::lastCudaError("Montecarlo (after)"); // temp debug
 
-    // Debug, facultatif (voir addVector_device.cu)
-//     Device::synchronize(); // Temp,debug, only for printf in  GPU
+    Device::memcpyDToH(&nx, ptrDevNx, sizeof(long)); // barriere synchronisation implicite
 
-    Device::memcpyDToH(&nx, ptrDevNx, sizeof(int)); // barriere synchronisation implicite
+    piHat = (double)M * ((double)nx/(double)n);
+    }
 
-    *ptrPiHat = ((float)nx/(float)n) * (float)m;
+double Montecarlo::getPiHat()
+    {
+    return piHat;
+    }
+
+long Montecarlo::getNx()
+    {
+    return nx;
     }
 /*--------------------------------------*\
  |*		Private			*|

@@ -14,7 +14,7 @@
 class Montecarlo
     {
     public:
-	Montecarlo(const Grid& grid, float* ptrPiHat, float m, long n);
+	Montecarlo(const Grid& grid, int m, long n);
 	virtual ~Montecarlo();
 
 	/*--------------------------------------*\
@@ -22,22 +22,24 @@ class Montecarlo
 	 \*-------------------------------------*/
     public:
 	void run();
+	double getPiHat();
+	long getNx();
 	/*--------------------------------------*\
 	|*		Attributs		*|
 	 \*-------------------------------------*/
     private:
 	dim3 db;
 	dim3 dg;
-	float m;
-	float n;
+	int M;
+	long n;
 	int nbThreat;
-	int nx;
+	long nx;
 
 	size_t sizeOctetGenerator;
 	size_t sizeOctetSM;
 
-	float* ptrPiHat;
-	int* ptrDevNx;
+	double piHat;
+	long* ptrDevNx;
 	curandState* tabDevGeneratorGM;
 
     };

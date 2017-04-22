@@ -1,6 +1,7 @@
 #include "Indice1D.h"
 #include "cudaTools.h"
-#include "reductionADD.h"
+#include "reductionADDLock.h"
+#include "Lock.h"
 #include "limits.h"
 
 #include <curand_kernel.h>
@@ -15,14 +16,15 @@
  \*-------------------------------------*/
 
 __global__ void setup_kernel_rand(curandState* tabDevGenerator, int deviceID);
-__global__ void montecarlo(int* ptrDevNx, curandState* tabDevGenerator, long n, float m);
+__global__ void montecarlo(long* ptrDevNx, curandState* tabDevGenerator, long n, float m);
 
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
 
-static __device__ void reductionIntraThread(int* tabSM, curandState* tabDevGenerator, long n, float m);
-__device__ float fpi(float x);
+__device__ int mutex=0;
+static __device__ float fpi(float x);
+static __device__ void reductionIntraThread(long* tabSM, curandState* tabDevGenerator, long n, float m);
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
@@ -48,37 +50,47 @@ __global__ void setup_kernel_rand(curandState* tabDevGenerator, int deviceId)
     curand_init(seed, sequenceNumber, offset, &tabDevGenerator[TID]);
     }
 
-__global__ void montecarlo(int* ptrDevNx, curandState* tabDevGenerator, long n, float m)
+__global__ void montecarlo(long* ptrDevNx, curandState* tabDevGenerator, long n, float m)
     {
-    extern __shared__ int tabSM[];
+    extern __shared__ long tabSM[];
 
     reductionIntraThread(tabSM, tabDevGenerator, n, m);
 
     __syncthreads();
 
-    reductionADD<int>(tabSM, ptrDevNx);
+
+    Lock lock=Lock(&mutex);
+
+    reductionADD<long>(tabSM, ptrDevNx, &lock);
     }
 
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
 
-__device__ void reductionIntraThread(int* tabSM, curandState* tabDevGenerator, long n, float m)
+__device__ void reductionIntraThread(long* tabSM, curandState* tabDevGenerator, long n, float m)
     {
     const int TID = Indice1D::tid();
     const int TID_LOCAL = Indice1D::tidLocal();
+    const int NB_THREAD = Indice1D::nbThread();
     // Global Memory -> Register (optimization)
     curandState localGenerator = tabDevGenerator[TID];
     float xAlea;
     float yAlea;
-    int nx = 0;
-    for (long i = 1; i <= n; i++)
-	{
-	xAlea = curand_uniform(&localGenerator);
-	yAlea = curand_uniform(&localGenerator) * m;
+    long nx = 0;
+    int s = TID;
 
-	nx += yAlea < fpi(xAlea);
+    while(s < n)
+    {
+    xAlea = curand_uniform(&localGenerator);
+    yAlea = curand_uniform(&localGenerator) * m;
+
+    if(fpi(xAlea) > yAlea)
+	{
+	nx++;
 	}
+    s += NB_THREAD;
+    }
     //Register -> Global Memory
     //Necessaire si on veut utiliser notre generator
     // - dans d?autre kernel
@@ -89,7 +101,7 @@ __device__ void reductionIntraThread(int* tabSM, curandState* tabDevGenerator, l
 
 __device__ float fpi(float x)
     {
-    return 4.f / (1.f + x * x);
+    return 4.0f / (1.0f + x * x);
     }
 
 /*----------------------------------------------------------------------*\
