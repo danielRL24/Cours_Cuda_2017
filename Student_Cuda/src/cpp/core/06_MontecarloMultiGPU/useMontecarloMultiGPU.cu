@@ -60,7 +60,7 @@ bool useMontecarloMultiGPU()
 	cout << "Pi hat  = " << piHat << endl;
 	cout << "Pi true = " << PI << endl;
 
-	bool isOk = MathTools::isEquals((float)piHat, (float)PI, (float)1e-4);
+	bool isOk = MathTools::isEquals((float)piHat, (float)PI, (float)1e-3);
 	cout << "MontecarloMultiGPU : isOk = " << isOk << endl;
 
 	return isOk;

@@ -15,13 +15,27 @@
 class Histogramme
     {
     public:
-	Histogramme(const Grid& grid, int* tabData);
+	Histogramme(const Grid& grid);
 	virtual ~Histogramme();
+
+	/*--------------------------------------*\
+	|*		Methodes		*|
+	 \*-------------------------------------*/
+    public:
+	int* run();
 
 	/*--------------------------------------*\
 	|*		Attributs		*|
 	 \*-------------------------------------*/
     private:
+	dim3 dg, db;
+	int tabSize;
+
+	int* ptrTabData;
+	int* ptrTabResult;
+	int* ptrDevTabResult;
+	int* ptrDevTabData;
+
 	size_t sizeOctetGM;
 	size_t sizeOctetSM;
     };

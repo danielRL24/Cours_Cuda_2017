@@ -1,4 +1,7 @@
-
+#include "Indice1D.h"
+#include "Indice2D.h"
+#include "cudaTools.h"
+#include <stdio.h>
 
 /*----------------------------------------------------------------------*\
  |*			Declaration 					*|
@@ -8,9 +11,14 @@
  |*		Public			*|
  \*-------------------------------------*/
 
+__global__ void histogramme(int* ptrDevTabData, int *ptrDevTabResult, int tabSize, int dataMax);
+
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
+
+static __device__ void reductionIntraThread(int *ptrDevTabData, int tabSize, int *tabSM);
+static __device__ void reductionInterBlock(int* tabSM, int* ptrDevTabResult, int dataMax);
 
 /*----------------------------------------------------------------------*\
  |*			Implementation 					*|
@@ -20,9 +28,55 @@
  |*		Public			*|
  \*-------------------------------------*/
 
+__global__ void histogramme(int* ptrDevTabData, int *ptrDevTabResult, int tabSize, int dataMax)
+    {
+    extern __shared__ int tabSM[];
+
+    if(Indice2D::tidLocal() == 0)
+	{
+	for(int i=0; i<dataMax; i++)
+	    {
+	    tabSM[i] = 0;
+	    }
+	}
+
+    __syncthreads();
+
+    reductionIntraThread(ptrDevTabData, tabSize, tabSM);
+
+    __syncthreads();
+
+    reductionInterBlock(tabSM, ptrDevTabResult, dataMax);
+    }
+
 /*--------------------------------------*\
  |*		Private			*|
  \*-------------------------------------*/
+
+__device__ void reductionIntraThread(int *ptrDevTabData, int tabSize, int *tabSM)
+    {
+    const int NB_THREAD = Indice2D::nbThread();
+    const int TID = Indice2D::tid();
+
+    int s = TID;
+
+    while (s < tabSize)
+	{
+	atomicAdd(&tabSM[ptrDevTabData[s]], 1);
+	s += NB_THREAD;
+	}
+    }
+
+__device__ void reductionInterBlock(int* tabSM, int* ptrDevTabResult, int dataMax)
+    {
+    if(Indice2D::tidLocal() == 0)
+	{
+	for(int i=0; i < dataMax; i++)
+	    {
+	    atomicAdd(&ptrDevTabResult[i], tabSM[i]);
+	    }
+	}
+    }
 
 /*----------------------------------------------------------------------*\
  |*			End	 					*|
