@@ -1,0 +1,119 @@
+
+package ch.arc.cours.lamda.interfacefonctionelle.b_neu.d_function.a_math.custom.add;
+
+import org.junit.Assert;
+
+import ch.arc.cours.lamda.a_interfacefonctionelle.b_neu.d_function.a_math.custom.Function_I;
+
+public class UseAdd
+	{
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Public							*|
+	\*------------------------------------------------------------------*/
+
+	public static void main(String[] args)
+		{
+		main();
+		}
+
+	public static void main()
+		{
+		System.out.println("Add");
+
+		useAdd1();
+		useAdd2();
+		useAdd3();
+		}
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Private						*|
+	\*------------------------------------------------------------------*/
+
+	/*------------------------------*\
+	|*		add						*|
+	\*------------------------------*/
+
+	/**
+	 * x -> (2*x)+ (x+1)
+	 *
+	 * h(x)= 2*x
+	 * g(x)= x+1
+	 * (g + h) (x)= h(x)+g(x)
+	 *
+	 * Classe interne anonyme
+	 */
+	private static void useAdd1()
+		{
+		// TODO
+		Function_I h = null;
+		Function_I g = null;
+
+		Function_I u1 = FunctionAdd.add1(h, g);
+		Function_I u2 = FunctionAdd.add2(h, g);
+		Function_I u3 = FunctionAdd.add3(h, g);
+
+		check(u1, u2, u3);
+		}
+
+	/**
+	 * x -> (2*x)+ (x+1)
+	 *
+	 * h(x)= 2*x
+	 * g(x)= x+1
+	 * (g + h) (x)= h(x)+g(x)
+	 *
+	 * lamda dans variable
+	 */
+	private static void useAdd2()
+		{
+		// TODO
+		Function_I h = null;
+		Function_I g = null;
+
+		Function_I u1 = FunctionAdd.add1(h, g);
+		Function_I u2 = FunctionAdd.add2(h, g);
+		Function_I u3 = FunctionAdd.add3(h, g);
+
+		check(u1, u2, u3);
+		}
+
+	/**
+	 * x -> (2*x)+ (x+1)
+	 *
+	 * h(x)= 2*x
+	 * g(x)= x+1
+	 * (g + h) (x)= h(x)+g(x)
+	 *
+	 * lamda
+	 */
+	private static void useAdd3()
+		{
+		// TODO
+
+		// Pas pratique dans ce cas
+			{
+//			Function_I u1 = FunctionAdd.add1(h, g);
+//			Function_I u2 = FunctionAdd.add2(h, g);
+//			Function_I u3 = FunctionAdd.add3(h, g);
+//
+//			check(u1, u2, u3);
+			}
+		}
+
+	/*------------------------------*\
+	|*				tools			*|
+	\*------------------------------*/
+
+	private static void check(Function_I u1, Function_I u2, Function_I u3)
+		{
+		System.out.println(u1.value(2));
+		System.out.println(u2.value(2));
+		System.out.println(u3.value(2));
+
+		Assert.assertTrue(u1.value(2) == (2 + 1) + (2 * 2));
+		Assert.assertTrue(u2.value(2) == (2 + 1) + (2 * 2));
+		Assert.assertTrue(u3.value(2) == (2 + 1) + (2 * 2));
+		}
+
+	}

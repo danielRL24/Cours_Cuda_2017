@@ -1,0 +1,10 @@
+
+package ch.arc.cours.lamda.interfacefonctionelle.neu.function.math.original;
+
+import java.util.function.Function;
+
+public interface FunctionDouble extends Function<Double, Double>
+	{
+
+	}
+

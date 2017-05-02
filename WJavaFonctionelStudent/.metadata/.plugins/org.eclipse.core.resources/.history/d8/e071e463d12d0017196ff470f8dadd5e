@@ -1,0 +1,134 @@
+
+package ch.arc.cours.lamda.interfacefonctionelle.neu.function.math.original;
+
+import java.util.function.Function;
+
+import org.junit.Assert;
+
+public class UseFunctionMath
+	{
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Public							*|
+	\*------------------------------------------------------------------*/
+
+	public static void main(String[] args)
+		{
+		main();
+		}
+
+	public static void main()
+		{
+		System.out.println("math : Function");
+
+		function();
+		}
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Private						*|
+	\*------------------------------------------------------------------*/
+
+	private static void function()
+		{
+		add();
+
+		compose();
+		andThen();
+
+		methodeReference();
+		}
+
+	/*------------------------------*\
+	|*		Function<T1,T2>			*|
+	\*------------------------------*/
+
+	/**
+	 * f(x) = (2*x)+ (x+1)
+	 *
+	 * h(x)= 2*x
+	 * g(x)= x+1
+	 * f(x) = (g + h) (x)= h(x)+g(x)
+	 */
+	private static void add()
+		{
+		//lamda dans variable
+			{
+			Function<Double, Double> h = x -> 2 * x;
+			Function<Double, Double> g = x -> x + 1;
+
+			Function<Double, Double> f = x -> h.apply(x) + g.apply(x);
+			Assert.assertTrue(f.apply(2d) == 7);
+			}
+		}
+
+	/**
+	 * f(x) = x*x+1
+	 *
+	 * h(x)= x+1
+	 * g(x)= x*x
+	 * f(x) = (g o h) (x)= h(g(x))
+	 */
+	private static void compose()
+		{
+		// lamda dans variable
+			{
+			Function<Double, Double> h = x -> x + 1;
+			Function<Double, Double> g = x -> x * x;
+
+			Function<Double, Double> f = h.compose(g);
+			Assert.assertTrue(f.apply(2d) == 5);
+			}
+		}
+
+	/**
+	 * f(x) = 2(x+1)
+	 */
+	private static void andThen()
+		{
+		// lamda dans variable
+			{
+			Function<Double, Double> h = x -> x + 1;
+			Function<Double, Double> g = x -> 2 * x;
+
+			Function<Double, Double> f = h.andThen(g);
+			Assert.assertTrue(f.apply(2d) == 6);
+			}
+		}
+
+	/**
+	 * f(x) = sqrt(cos(x))
+	 */
+	private static void methodeReference()
+		{
+		// lamda dans variable
+			{
+			Function<Double, Double> h = x -> Math.cos(x);
+			Function<Double, Double> g = x -> Math.sqrt(x);
+
+			Function<Double, Double> f = g.compose(h);
+
+			Assert.assertTrue(isEquals(f.apply(2 * Math.PI), 1));
+			}
+
+		// lamda dans variable : reference methode
+			{
+			Function<Double, Double> h = Math::cos;
+			Function<Double, Double> g = Math::sqrt;
+
+			Function<Double, Double> f = g.compose(h);
+
+			Assert.assertTrue(isEquals(f.apply(2 * Math.PI), 1));
+			}
+		}
+
+	/*------------------------------*\
+	|*				tools			*|
+	\*------------------------------*/
+
+	private static boolean isEquals(double x1, double x2)
+		{
+		final double epsilon = 1e-6;
+		return Math.abs(x1 - x2) < epsilon;
+		}
+
+	}

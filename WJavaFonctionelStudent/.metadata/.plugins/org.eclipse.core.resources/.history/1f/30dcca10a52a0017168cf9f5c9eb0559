@@ -1,0 +1,120 @@
+
+package ch.arc.cours.lamda.interfacefonctionelle.neu.existant.function;
+
+import java.util.List;
+
+import ch.arc.cours.lamda.interfacefonctionelle.neu.existant.function.tools.Maison;
+import ch.arc.cours.lamda.interfacefonctionelle.neu.existant.function.tools.MaisonTools;
+
+public class UseMap
+	{
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Public							*|
+	\*------------------------------------------------------------------*/
+
+	public static void main(String[] args)
+		{
+		main();
+		}
+
+	public static void main()
+		{
+		System.out.println("map : Function");
+
+		mapping();
+		}
+
+	private static void mapping()
+		{
+		int n = 3;
+		List<Maison> list = MaisonTools.create(n);
+
+		System.out.println(list);
+
+		printSurface(list);
+		printPrix(list);
+		printPiece(list);
+
+		printSurfaceInt(list);
+		printPrixInt(list);
+		printPieceInt(list);
+		}
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Private						*|
+	\*------------------------------------------------------------------*/
+
+	/*------------------------------*\
+	|*			Function<T1,T2>		*|
+	\*------------------------------*/
+
+	private static void printSurface(List<Maison> list)
+		{
+		// version : classe interne anonyme dans variable
+			{
+			// TODO
+			}
+
+		// Version : lamda dans variable
+			{
+			// TODO
+			}
+
+		// Version : lamda
+			{
+			// TODO
+			}
+		}
+
+	private static void printPiece(List<Maison> list)
+		{
+		// Version : lamda
+			{
+			// TODO
+			}
+		}
+
+	private static void printPrix(List<Maison> list)
+		{
+		// Version : lamda
+			{
+			// TODO
+			}
+		}
+
+	/*------------------------------*\
+	|*		ToIntFunction<T>		*|
+	\*------------------------------*/
+
+	private static void printSurfaceInt(List<Maison> list)
+		{
+
+		// Version : lamda dans variable
+			{
+			// TODO
+			}
+
+		// Version : lamda
+			{
+			// TODO
+			}
+		}
+
+	private static void printPieceInt(List<Maison> list)
+		{
+		// Version : lamda
+			{
+			// TODO
+			}
+		}
+
+	private static void printPrixInt(List<Maison> list)
+		{
+		// Version : lamda
+			{
+			// TODO
+			}
+		}
+
+	}

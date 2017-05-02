@@ -1,0 +1,10 @@
+
+package ch.arc.cours.lamda.interfacefonctionelle.b_neu.function.math.original;
+
+import java.util.function.BiFunction;
+
+public interface BiFunctionDouble extends BiFunction<Double,Double, Double>
+	{
+
+	}
+

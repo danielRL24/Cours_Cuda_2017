@@ -1,0 +1,106 @@
+
+package ch.arc.cours.lamda.c_stream;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.junit.Assert;
+
+public class UseStream_00_Intro
+	{
+	/*------------------------------------------------------------------*\
+	|*							Methodes Public							*|
+	\*------------------------------------------------------------------*/
+
+	public static void main(String[] args)
+		{
+		main();
+		}
+
+	public static void main()
+		{
+		System.out.println("Stream : list array");
+
+		// obtenir un stream
+		useList1();
+		useList2();
+
+		useArray1();
+
+		// see too
+		//	UseIterable
+		//	UseInfinite (advanced)
+		// 	UseParallel
+		}
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Private						*|
+	\*------------------------------------------------------------------*/
+
+	/*------------------------------*\
+	|*				List			*|
+	\*------------------------------*/
+
+	/**
+	 * recuperation et count
+	 */
+	private static void useList1()
+		{
+		List<Integer> list = Arrays.asList(1, 2, 3);
+
+		// v1
+			{
+			Stream<Integer> stream = list.stream();
+
+			long count = stream.count();
+			// count : terminal, impossible employer stream ensuite
+
+			Assert.assertTrue(count == list.size());
+			}
+
+		// v2
+			{
+			long count = list.stream().count();
+			// count : terminal, impossible employer stream ensuite
+
+			Assert.assertTrue(count == list.size());
+			}
+		}
+
+	/**
+	 * recuperation, limit, count
+	 *
+	 * Quoi: des 2 premiers element de la stream
+	 * Comment : limit
+	 */
+	private static void useList2()
+		{
+		List<Integer> list = Arrays.asList(1, 2, 3);
+
+		int m = 2;
+		long count = list.stream().limit(m).count();
+		// limit : non terminal, stream-in -> stream-out
+		// count : terminal, impossible employer stream ensuite
+
+		Assert.assertTrue(count == m);
+		}
+
+	/*------------------------------*\
+	|*				Array			*|
+	\*------------------------------*/
+
+	/**
+	 * recuperation et count
+	 */
+	private static void useArray1()
+		{
+		Integer[] tab = { 1, 2, 3 };
+
+		long count = Arrays.stream(tab).count();
+		// count : terminal, impossible employer stream ensuite
+
+		Assert.assertTrue(count == tab.length);
+		}
+
+	}

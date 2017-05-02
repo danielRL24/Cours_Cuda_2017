@@ -1,0 +1,25 @@
+1493633568364	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.old'
+1493634409252	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.neu.existant'
+1493634424188	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.neu'
+1493634449609	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.b_neu.consumerprediacte'
+1493634462825	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.b_neu.binaryoperator'
+1493634475204	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.b_neu.function'
+1493634493310	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.b_neu.c_binaryoperator.simple'
+1493634505223	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.b_neu.c_binaryoperator.objet'
+1493634519866	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.b_neu.c_binaryoperator.a_simple.generic'
+1493634531435	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.b_neu.c_binaryoperator.a_simple.integer'
+1493634553181	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.b_neu.d_function.math'
+1493634564571	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.b_neu.d_function.map'
+1493634639866	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.b_neu.a_consumerprediacte'
+1493634648779	Move compilation unit
+1493634654674	Move compilation unit
+1493634721080	Copy compilation unit
+1493634855267	Rename package 'ch.arc.cours.lamda.interfacefonctionelle'
+1493634944533	Move compilation unit
+1493707159677	Rename package 'ch.arc.cours.lamda.c_referencemethode'
+1493707173633	Rename package 'ch.arc.cours.lamda.b_stream'
+1493707339035	Delete element
+1493707343538	Delete element
+1493708739748	Delete element
+1493709793722	Rename package 'ch.arc.cours.lamda.a_interfacefonctionelle.b_neu.c_binaryoperator.b_objet'
+1493709868684	Rename type 'UseReduceMin'

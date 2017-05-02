@@ -1,0 +1,237 @@
+
+package ch.arc.cours.lamda.c_stream;
+
+import java.util.Arrays;
+import java.util.IntSummaryStatistics;
+import java.util.List;
+import java.util.OptionalDouble;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+
+import org.junit.Assert;
+
+import ch.arc.cours.lamda.c_stream.tools.Personne;
+import ch.arc.cours.lamda.c_stream.tools.PersonneTools;
+
+public class UseStream_01
+	{
+	/*------------------------------------------------------------------*\
+	|*							Methodes Public							*|
+	\*------------------------------------------------------------------*/
+
+	public static void main(String[] args)
+		{
+		main();
+		}
+
+	public static void main()
+		{
+		int n = 5;
+
+		System.out.println("stream : interface fonctionel classique");
+
+		usePredicate(n);
+		useConsumer(n);
+		useBinaryOperator();
+
+		// combinaison
+			{
+			usePredicateConsumer(n);
+			usePredicateBinaryOperator();
+			useFunctionBinaryOperator(n);
+
+			useMaptoInt(n);
+			}
+
+		}
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Private						*|
+	\*------------------------------------------------------------------*/
+
+	/**
+	 * Quoi : 	 	Filter
+	 * Comment :	Predicate<T>
+	 *
+	 * Probleme :	nombre de personne dont l'age est > 50
+	 */
+	private static void usePredicate(int n)
+		{
+		List<Personne> list = PersonneTools.create(n);
+
+		System.out.println("Avant : " + list);
+
+		// TODO
+		Predicate<Personne> ageBigger50 = null;
+
+		long count = -1;
+		// count : terminal, interdit employer stream apres
+
+		System.out.println("age > 50 : " + count);
+		}
+
+	/**
+	 * Quoi : 	 	forEach
+	 * Comment :	Consumer<T>
+	 *
+	 * Probleme :	incrementer de 1 l'age des personnes
+	 */
+	private static void useConsumer(int n)
+		{
+		List<Personne> list = PersonneTools.create(n);
+
+		// lamda dans variable
+			{
+			// TODO
+			Consumer<Personne> incAge = null;
+
+			// TODO
+
+			// forEach : terminal, interdit employer stream apres, sur place
+			}
+
+		// lamda reference methode
+			{
+			// TODO
+
+			// forEach : terminal, interdit employer stream apres,sur place
+			}
+
+		System.out.println("Apres : " + list);
+		}
+
+	/**
+	 * Quoi : 	 	filter				forEach
+	 * Comment :	Predicate<T>		Consumer<T>
+	 *
+	 * Probleme :	incrementer de 1 l'age des personnes > 50
+	 */
+	private static void usePredicateConsumer(int n)
+		{
+		List<Personne> list = PersonneTools.create(n);
+
+		// lamda dans variable, reference methode si possible
+			{
+			Predicate<Personne> ageBigger50 = null;
+			Consumer<Personne> incAge =null;
+
+			//TODO
+
+			// filter : non terminal stream-in, stream-out
+			// forEach : terminal , sur place, interdit employer stream apres, sur place
+			}
+
+		System.out.println("Apres : " + list);
+		}
+
+	/**
+	 * Quoi : 	 	reduce
+	 * Comment :	BinaryOperator<T>
+	 *
+	 * Probleme :	somme des elements de la liste
+	 */
+	private static void useBinaryOperator()
+		{
+		List<Integer> list = Arrays.asList(1, 2, 3);
+
+		// lamda
+			{
+			// TODO
+			Integer sum = null;
+			// reduce : terminal, interdit employer stream apres
+
+			Assert.assertTrue(sum == 1 + 2 + 3);
+			}
+
+		// lamda, reference methode
+			{
+			// TODO
+			Integer sum = null;
+			// reduce : terminal, interdit employer stream apres
+
+			Assert.assertTrue(sum == 1 + 2 + 3);
+			}
+		}
+
+	/**
+	 * Quoi : 	 	filter			reduce
+	 * Comment :	Predicate<T> 	BinaryOperator<T>
+	 *
+	 * Probleme :	somme des elements paires de la liste
+	 */
+	private static void usePredicateBinaryOperator()
+		{
+		List<Integer> list = Arrays.asList(1, 2, 3, 4);
+
+		Predicate<Integer> ispaire = i -> i % 2 == 0;
+
+		// lamda,reference methode
+			{
+			Integer sum = list.stream().filter(ispaire).reduce(0, Integer::sum);
+			// filter : non terminal stream-in, stream-out
+			// reduce : terminal, interdit employer stream apres
+
+			Assert.assertTrue(sum == 2 + 4);
+			}
+		}
+
+	/**
+	 * Quoi : 	 	map					reduce
+	 * Comment :	Function<T1,T2> 	BinaryOperator<T>
+	 *
+	 * Probleme :	somme des ages
+	 */
+	private static void useFunctionBinaryOperator(int n)
+		{
+		List<Personne> list = PersonneTools.create(n);
+
+		Integer sum = list.stream().map(Personne::getAge).reduce(0, Integer::sum);
+		// map    : non terminal, stream-in, stream-out
+		// reduce : terminal, interdit employer stream apres
+
+		System.out.println("somme des ages = " + sum);
+		}
+
+	/**
+	 * Quoi : 	 	map					reduce
+	 * Comment :	Function<T1,T2> 	sum
+	 *
+	 * Probleme :	somme des ages
+	 * Probleme :	moyenne des hauteurs
+	 */
+	private static void useMaptoInt(int n)
+		{
+		List<Personne> list = PersonneTools.create(n);
+
+		// lamda dans varibale, reference methode si possible
+			{
+			ToIntFunction<Personne> age = Personne::getAge;
+			ToIntFunction<Personne> hauteur = Personne::getHauteur;
+
+			Integer sum = list.stream().mapToInt(age).sum();
+			OptionalDouble average = list.stream().mapToInt(hauteur).average();
+			IntSummaryStatistics stat = list.stream().mapToInt(hauteur).summaryStatistics();
+
+			// sum, average, summaryStatistics : terminal
+
+			System.out.println("somme des ages = " + sum);
+			System.out.println("moyenne des hauteurs = " + average.getAsDouble());
+			System.out.println("stat = " + stat);
+			}
+
+		// lamda, reference methode si possible
+			{
+			Integer sum = list.stream().mapToInt(Personne::getAge).sum();
+			OptionalDouble average = list.stream().mapToInt(Personne::getHauteur).average();
+			IntSummaryStatistics stat = list.stream().mapToInt(Personne::getHauteur).summaryStatistics();
+
+			// sum, average, summaryStatistics : terminal
+
+			System.out.println("somme des ages = " + sum);
+			System.out.println("moyenne des hauteurs = " + average.getAsDouble());
+			System.out.println("stat = " + stat);
+			}
+		}
+
+	}

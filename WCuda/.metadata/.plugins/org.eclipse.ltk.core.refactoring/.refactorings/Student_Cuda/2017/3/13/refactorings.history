@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;Student_Cuda/src/cpp/core/03_Slice/moo&apos; to &apos;device&apos;" description="Rename resource &apos;moo&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/cpp/core/03_Slice/moo" name="device" stamp="1490697865074" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;Student_Cuda/src/cpp/core/03_Slice/01_object&apos; to &apos;01_objet&apos;" description="Rename resource &apos;01_object&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/cpp/core/03_Slice/01_object" name="01_objet" stamp="1490698310388" updateReferences="true"/>
+</session>

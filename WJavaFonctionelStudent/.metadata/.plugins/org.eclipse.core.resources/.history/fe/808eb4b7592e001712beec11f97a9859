@@ -1,0 +1,37 @@
+
+package ch.arc.cours.lamda.interfacefonctionelle.b_neu.a_predicate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+import ch.arc.cours.lamda.interfacefonctionelle.b_neu.a_predicate.tools.Homme;
+
+public class HommeManipulator
+	{
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Public							*|
+	\*------------------------------------------------------------------*/
+
+	/**
+	 * see chapter stream to see beautiful flexible optimized code
+	 */
+	public static Iterable<Homme> filter(Iterable<Homme> iterable, Predicate<Homme> predicate)
+		{
+		List<Homme> list = new ArrayList<Homme>();
+
+		for(Homme homme:iterable)
+			{
+			// TODO
+			}
+
+		return list;
+		}
+
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Private						*|
+	\*------------------------------------------------------------------*/
+
+	}

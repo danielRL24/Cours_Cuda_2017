@@ -1,0 +1,99 @@
+
+package ch.arc.cours.lamda.interfacefonctionelle.neu.binaryoperator.simple.generic;
+
+import java.util.Arrays;
+
+import org.junit.Assert;
+
+import ch.arc.cours.lamda.interfacefonctionelle.neu.binaryoperator.simple.NumberTools;
+
+public class UseReduceAdd
+	{
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Public							*|
+	\*------------------------------------------------------------------*/
+
+	public static void main(String[] args)
+		{
+		main();
+		}
+
+	public static void main()
+		{
+		System.out.println("reduce : BinaryOperator<Integer> : add");
+		reduceAdd();
+		}
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Private						*|
+	\*------------------------------------------------------------------*/
+
+	private static void reduceAdd()
+		{
+		int n = 3;
+		int[] tab = NumberTools.create(n);
+
+		int sum1 = version1(tab);
+		int sum2 = version2(tab);
+		int sum3 = version3(tab);
+		int sum4 = version4(tab);
+
+		// check
+			{
+			System.out.println(Arrays.toString(tab));
+			System.out.println("sum = " + sum1);
+			System.out.println("sum = " + sum2);
+			System.out.println("sum = " + sum3);
+			System.out.println("sum = " + sum4);
+
+			int sumTrue = n * (n + 1) / 2;
+
+			Assert.assertTrue(sum1 == sumTrue);
+			Assert.assertTrue(sum2 == sumTrue);
+			Assert.assertTrue(sum3 == sumTrue);
+			Assert.assertTrue(sum4 == sumTrue);
+			}
+		}
+
+	/*------------------------------*\
+	|*		BinaryOperator<T>		*|
+	\*------------------------------*/
+
+	/**
+	 * classe interne anonyme
+	 */
+	private static int version1(int[] tab)
+		{
+		// TODO
+		return -1;
+		}
+
+	/**
+	 * lamda dans variable
+	 */
+	private static int version2(int[] tab)
+		{
+		// TODO
+		return -1;
+		}
+
+	/**
+	 * lamda
+	 */
+	private static int version3(int[] tab)
+		{
+		// TODO
+		return -1;
+		}
+
+	/**
+	 * lamda, reference methode
+	 */
+	private static int version4(int[] tab)
+		{
+		// TODO
+		return -1;
+		}
+
+	}

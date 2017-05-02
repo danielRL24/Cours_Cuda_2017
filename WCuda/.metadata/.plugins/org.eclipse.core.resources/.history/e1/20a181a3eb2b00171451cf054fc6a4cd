@@ -1,0 +1,92 @@
+#include "Indice2D.h"
+#include "cudaTools.h"
+#include <stdio.h>
+
+
+/*----------------------------------------------------------------------*\
+ |*			Declaration 					*|
+ \*---------------------------------------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Public			*|
+ \*-------------------------------------*/
+
+__global__ void histogramme(int* ptrDevTabData, int *ptrDevTabResult, int tabSize);
+
+/*--------------------------------------*\
+ |*		Private			*|
+ \*-------------------------------------*/
+
+static __device__ void reductionIntraThread(int *ptrDevTabData, int tabSize, int *tabSM);
+static __device__ void reductionInterBlock(int* tabSM, int* ptrDevTabResult, int tabSize);
+
+/*----------------------------------------------------------------------*\
+ |*			Implementation 					*|
+ \*---------------------------------------------------------------------*/
+
+/*--------------------------------------*\
+ |*		Public			*|
+ \*-------------------------------------*/
+
+__global__ void histogramme(int* ptrDevTabData, int *ptrDevTabResult, int tabSize)
+{
+	extern __shared__ int tabSM[];
+
+	{
+	const int TID_LOCAL = Indice1D::tidLocal();
+	const int NB_THREAD_LOCAL = Indice1D::nbThreadBlock();
+
+	int s = TID_LOCAL
+
+	// init 0
+	while(s < dataMax)
+	    {
+	    tabSM[s] = 0;
+	    s += NB_THREAD_LOCAL;
+	    }
+	}
+	__syncthreads();
+
+	reductionIntraThread(ptrDevTabData, tabSize, tabSM);
+
+	__syncthreads();
+
+	reductionInterBlock(tabSM, ptrDevTabResult, tabSize);
+
+}
+
+
+/*--------------------------------------*\
+ |*		Private			*|
+ \*-------------------------------------*/
+
+__device__ void reductionIntraThread(int *ptrDevTabData, int tabSize, int *tabSM)
+{
+	const int NB_THREAD = Indice2D::nbThread();
+	const int TID_LOCAL = Indice2D::tidLocalBlock();
+	const int TID = Indice2D::tid();
+
+	int s = TID;
+
+	while (s < tabSize)
+	{
+		atomicAdd(&tabSM[ptrDevTabData[s]], 1);
+		s += NB_THREAD;
+	}
+}
+
+__device__ void reductionInterBlock(int* tabSM, int* ptrDevTabResult, int tabSize)
+    {
+	if (Indice2D::tidLocal() == 0)
+	{
+		for (int i = 0; i < 256; i++)
+		{
+		    atomicAdd(&ptrDevTabResult[i], tabSM[i]);
+		}
+	}
+    }
+
+/*----------------------------------------------------------------------*\
+ |*			End	 					*|
+ \*---------------------------------------------------------------------*/
+

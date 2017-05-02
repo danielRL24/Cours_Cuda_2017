@@ -1,0 +1,142 @@
+
+package ch.arc.cours.lamda.c_stream;
+
+import java.util.Arrays;
+import java.util.IntSummaryStatistics;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.IntBinaryOperator;
+import java.util.function.Predicate;
+import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
+
+import ch.arc.cours.lamda.c_stream.tools.Personne;
+import ch.arc.cours.lamda.c_stream.tools.PersonneTools;
+
+public class UseStreamOld
+	{
+	/*------------------------------------------------------------------*\
+	|*							Methodes Public							*|
+	\*------------------------------------------------------------------*/
+
+	public static void main(String[] args)
+		{
+		main();
+		}
+
+	public static void main()
+		{
+		int n = 5;
+
+		System.out.println("stream :collect");
+
+		}
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Private						*|
+	\*------------------------------------------------------------------*/
+
+
+
+	private static void use6(int n)
+		{
+		List<Personne> list = PersonneTools.create(n);
+
+		Predicate<Personne> ageBigger50 = p -> p.getAge() > 50;
+		Function<Personne, Integer> age = p -> p.getAge();
+
+		List<Integer> listFiltrerMap = list.stream().filter(ageBigger50).map(age).collect(Collectors.toList());
+
+		System.out.println("age > 50 : " + listFiltrerMap);
+		}
+
+	private static void use7(int n)
+		{
+		List<Personne> list = PersonneTools.create(n);
+
+		Predicate<Personne> ageBigger50 = p -> p.getAge() > 50;
+		Function<Personne, Integer> age = p -> p.getAge();
+		BinaryOperator<Integer> add = (n1, n2) -> n1 + n2;
+
+		// version 1
+			{
+			Integer somme = list.stream().filter(ageBigger50).map(age).reduce(0, add); // 0 init, optional
+			// filter : non terminal stream-in, stream-out
+			// map : non terminal stream-in, stream-out
+			// reduce : terminal
+
+			System.out.println("somme age > 50 : " + somme);
+			}
+
+		// version 2
+			{
+			ToIntFunction<Personne> ageInt = p -> p.getAge();
+			Integer somme = list.stream().filter(ageBigger50).mapToInt(ageInt).sum();
+
+			System.out.println("somme age > 50 : " + somme);
+			}
+
+		// version 3
+			{
+			Integer somme = list.stream().mapToInt(p -> p.getAge()).filter(agee -> agee > 50).sum();
+			System.out.println("somme age > 50 : " + somme);
+			}
+
+		// Reduction par collector
+			{
+			// version 5 reduction par collector
+				{
+				Optional<Integer> somme = list.stream().filter(p -> p.getAge() > 50).map(p -> p.getAge()).collect(Collectors.reducing(add));
+				System.out.println("somme age > 50 : " + somme);
+				}
+
+			// version 6 reduction par collector, statistique
+				{
+				IntSummaryStatistics stat = list.stream().filter(p -> p.getAge() > 50).collect(Collectors.summarizingInt(p -> p.getAge()));
+				System.out.println("somme age > 50 : " + stat);
+				}
+			}
+
+		// Reference de methode
+			{
+
+			// version 7 reduction par collector, statistique
+				{
+				long somme = list.stream().filter(p -> p.getAge() > 50).collect(Collectors.summarizingInt(Personne::getAge)).getSum();
+				System.out.println("somme age > 50 : " + somme);
+				}
+
+			// version 8 (revisite d'une ancienne version)
+				{
+				Integer somme = list.stream().mapToInt(Personne::getAge).filter(agee -> agee > 50).sum();
+				System.out.println("somme age > 50 : " + somme);
+				}
+			}
+
+		// Parallelisme
+			{
+			// Version 9
+				{
+				Integer somme = list.parallelStream().mapToInt(Personne::getAge).filter(agee -> agee > 50).sum();
+				System.out.println("somme age > 50 : " + somme);
+				}
+			}
+
+		}
+
+	private static void use8()
+		{
+		int[] tab = new int[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+		IntBinaryOperator prod = (n1, n2) -> n1 * n2;
+
+		System.out.println(Arrays.toString(tab));
+
+		// TODO et parallel? foreach pas possible ici?
+		int produitNombrePaire = Arrays.stream(tab).filter(i -> i % 2 == 0).reduce(1, prod);
+
+		System.out.println(produitNombrePaire); // 2*4*6*8
+		}
+
+	}

@@ -1,0 +1,60 @@
+
+package ch.arc.cours.lamda.interfacefonctionelle.neu.existant.binaryoperator.objet;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.BinaryOperator;
+
+import ch.arc.cours.lamda.interfacefonctionelle.neu.existant.binaryoperator.objet.tools.Voiture;
+import ch.arc.cours.lamda.interfacefonctionelle.neu.existant.binaryoperator.objet.tools.VoitureTools;
+
+public class UseReduceMin
+	{
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Public							*|
+	\*------------------------------------------------------------------*/
+
+	public static void main(String[] args)
+		{
+		main();
+		}
+
+	public static void main()
+		{
+		System.out.println("reduce : BinaryOperator : min");
+		reduceAdd();
+		}
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Private						*|
+	\*------------------------------------------------------------------*/
+
+	private static void reduceAdd()
+		{
+		int n = 3;
+		List<Voiture> list = VoitureTools.create(n);
+
+		Voiture voitureCheap = minPrix(list);
+
+		System.out.println(list);
+		System.out.println("Cheap : " + voitureCheap);
+		}
+
+	/*------------------------------*\
+	|*		BinaryOperator min		*|
+	\*------------------------------*/
+
+	/**
+	 * lamda dans variable
+	 */
+	private static Voiture minPrix(List<Voiture> list)
+		{
+		Comparator<Voiture> comparator = (v1, v2) -> Integer.compare(v1.getPrix(), v2.getPrix());
+		BinaryOperator<Voiture> operator = BinaryOperator.minBy(comparator);
+
+		Voiture voitureExpensive= new Voiture(Integer.MAX_VALUE,-1);
+		return VoitureManipulator.reduce(list, operator,voitureExpensive);
+		}
+
+	}

@@ -1,0 +1,28 @@
+1492683471023	Extract method 'version1'
+1492683659895	Rename type 'RunnableHello'
+1492683740030	Move compilation units
+1492683768575	Rename type 'UseIntro'
+1492683779669	Rename type 'RunnableIntro'
+1492684414267	Move compilation units
+1492685904040	Rename package 'ch.arc.cours.a_intro'
+1492685917588	Rename package 'ch.arc.cours.a_intro'
+1492685923680	Delete element
+1492685938797	Rename package 'ch.arc.cours.a_intro'
+1492686017333	Delete element
+1492686030927	Rename package 'ch.arc.cours.a_motivation'
+1492686048332	Rename field 'button'
+1492687049188	Rename package 'ch.arc.cours.a_intro'
+1492687254966	Extract local variable 'target'
+1492689366349	Rename package 'ch.arc.cours.a_interfacefonctionelle'
+1492689412742	Rename package 'ch.arc.cours.lamda.interfacefonctionelle'
+1492689489928	Delete element
+1492694528624	Copy compilation unit
+1492695009005	Rename type 'ComparatorTools'
+1492695054843	Move compilation units
+1492695092929	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.neu.predicate'
+1492695105162	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.neu.consumer'
+1492695111448	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.neu.consumer2'
+1492695564148	Rename package 'ch.arc.cours.lamda.interfacefonctionelle.neu.predicate.tools'
+1492695659600	Copy compilation unit
+1492699276064	Copy compilation units
+1492699451522	Move compilation unit

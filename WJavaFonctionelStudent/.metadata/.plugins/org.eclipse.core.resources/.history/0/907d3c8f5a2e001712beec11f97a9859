@@ -1,0 +1,327 @@
+
+package ch.arc.cours.lamda.c_referencemethode;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import javax.swing.JButton;
+
+import org.junit.Assert;
+
+import ch.arc.cours.lamda.a_interfacefonctionelle.b_neu.d_function.b_map.tools.Maison;
+import ch.arc.cours.lamda.c_referencemethode.tools.JFrameBouton;
+
+public class UseReferenceMethode
+	{
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Public							*|
+	\*------------------------------------------------------------------*/
+
+	public static void main(String[] args)
+		{
+		main();
+		}
+
+	public static void main()
+		{
+		methodeStatic();
+
+		methode0();
+		methode1();
+		methode2();
+		methode3();
+
+		constructeur1();
+		constructeur2();
+		}
+
+	/*------------------------------------------------------------------*\
+	|*							Methodes Private						*|
+	\*------------------------------------------------------------------*/
+
+	/*------------------------------*\
+	|*				Static			*|
+	\*------------------------------*/
+
+	private static void methodeStatic()
+		{
+		// classe interne anonyme
+			{
+			Function<Double, Double> f = new Function<Double, Double>()
+				{
+
+				@Override
+				public Double apply(Double t)
+					{
+					return Math.abs(t);
+					}
+				};
+
+			Assert.assertTrue(f.apply(-1d) == 1);
+			}
+
+		// lamda reference
+			{
+			// TODO
+			Function<Double, Double> f = null;
+
+			Assert.assertTrue(f.apply(-1d) == 1);
+			}
+
+		// lamda reference methode
+			{
+			// TODO
+			Function<Double, Double> f = null;
+
+			Assert.assertTrue(f.apply(-1d) == 1);
+			}
+		}
+
+	/*------------------------------*\
+	|*			non	Static			*|
+	\*------------------------------*/
+
+	/**
+	 * sum des nombres paires
+	 */
+	private static void methode0()
+		{
+		// lamda
+			{
+			Integer[] tab = { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+			// TODO
+			Integer sumPaire = null;
+
+			Assert.assertTrue(sumPaire == 2 + 4 + 6 + 8);
+			}
+
+		// lamda refernce methode
+		//		isPaire
+		//		add
+			{
+			Integer[] tab = { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+			// TODO
+			Integer sumPaire = -1;
+
+			Assert.assertTrue(sumPaire == 2 + 4 + 6 + 8);
+			}
+		}
+
+	/**
+	 * sum des prix des maisons
+	 */
+	private static void methode1()
+		{
+		// lamda
+			{
+			Maison[] tab = { new Maison(1, 10, 100), new Maison(2, 20, 200) }; // prix piece surface
+
+			// TODO
+			Integer prixTotal = -1;
+
+			Assert.assertTrue(prixTotal == 3);
+			}
+
+		// lamda refernce methode
+		//		prix
+		//		add
+			{
+			Maison[] tab = { new Maison(1, 10, 100), new Maison(2, 20, 200) }; // prix piece surface
+
+			// TODO
+			Integer prixTotal = -1;
+
+			Assert.assertTrue(prixTotal == 3);
+			}
+		}
+
+	/**
+	 * tri d'un tableau de string
+	 */
+	private static void methode2()
+		{
+		// classe interne anonyme
+			{
+			String[] tab = { "maison", "banane", "Meteo", "repas" };
+
+			System.out.println("avant : " + Arrays.asList(tab));
+
+			Comparator<String> comparator = new Comparator<String>()
+				{
+
+				@Override
+				public int compare(String s1, String s2)
+					{
+					return s1.compareToIgnoreCase(s2);
+					}
+				};
+			Arrays.sort(tab, comparator); // sur place
+
+			System.out.println("après : " + Arrays.asList(tab));
+			}
+
+		// lamda
+			{
+			String[] tab = { "maison", "banane", "Meteo", "repas" };
+
+			// TODO
+
+			System.out.println("après : " + Arrays.asList(tab));
+			}
+
+		// lamda  reference methode
+			{
+			String[] tab = { "maison", "banane", "Meteo", "repas" };
+
+			// TODO
+
+			System.out.println("après : " + Arrays.asList(tab));
+			}
+		}
+
+	/**
+	 * click dans un JButton (swing), afficher l'event
+	 */
+	private static void methode3()
+		{
+		// Classe interne anonyme
+			{
+			JButton button = new JButton("click");
+			button.addActionListener(new ActionListener()
+				{
+
+				@Override
+				public void actionPerformed(ActionEvent e)
+					{
+					System.out.println(e);
+					}
+				});
+
+			new JFrameBouton(button, "click classe interne anonyme");
+			}
+
+		// lamda
+			{
+			JButton button = new JButton("click");
+
+			// TODO
+
+			new JFrameBouton(button, "click lamada");
+			}
+
+		// lamda reference methode
+			{
+			JButton button = new JButton("click");
+
+			// TODO
+
+			new JFrameBouton(button, "click lamda reference methode");
+			}
+
+		}
+
+	/*------------------------------*\
+	|*				Constructeur	*|
+	\*------------------------------*/
+
+	/**
+	 * Construire une liste de nombres depuis un tableau de string
+	 *
+	 * Indication : map collect Collectors
+	 */
+	private static void constructeur1()
+		{
+		// lamda
+			{
+			try
+				{
+				String[] tab = { "1", "2", "3", "4" };
+				List<Number> list = Arrays.stream(tab).map(n -> new Integer(n)).collect(Collectors.toList());
+				System.out.println(list);
+				}
+			catch (Exception e)
+				{
+				System.out.println("impossible");
+				}
+			}
+
+		// lamda , reference methode
+			{
+
+			try
+				{
+				String[] tab = { "1", "2", "3", "4" };
+				List<Number> list = Arrays.stream(tab).map(Integer::new).collect(Collectors.toList());
+				System.out.println(list);
+				}
+			catch (Exception e)
+				{
+				System.out.println("impossible");
+				}
+			}
+		}
+
+	/**
+	 * Construire une liste de bouttons depuis un tableau de string
+	 *
+	 * Indication : map collect Collectors
+	 */
+	private static void constructeur2()
+		{
+		// lamda
+			{
+			String[] tabLabel = { "b1", "b2", "b3", "b4" };
+
+			// list
+				{
+				List<JButton> list = Arrays.stream(tabLabel).map(label -> new JButton(label)).collect(Collectors.toList());
+
+				new JFrameBouton(list, "list : lamda");
+				}
+
+			// set
+				{
+				Set<JButton> set = Arrays.stream(tabLabel).map(label -> new JButton(label)).collect(Collectors.toSet());
+
+				new JFrameBouton(set, "set : lamda ");
+				}
+			}
+
+		// lamda, reference constructeur
+			{
+			String[] tabLabel = { "b1", "b2", "b3", "b4" };
+
+			// list
+				{
+				List<JButton> list = Arrays.stream(tabLabel).map(JButton::new).collect(Collectors.toList());
+
+				new JFrameBouton(list, "list : lamda : constructeur reference");
+				}
+
+			// set
+				{
+				Set<JButton> set = Arrays.stream(tabLabel).map(JButton::new).collect(Collectors.toSet());
+
+				new JFrameBouton(set, "set : lamda : constructeur reference");
+				}
+
+			// array ADVANCED
+				{
+				JButton[] tab = Arrays.stream(tabLabel).map(JButton::new).toArray(JButton[]::new);
+
+				new JFrameBouton(tab, "array : lamda : constructeur reference");
+				}
+
+			}
+		}
+
+	}
