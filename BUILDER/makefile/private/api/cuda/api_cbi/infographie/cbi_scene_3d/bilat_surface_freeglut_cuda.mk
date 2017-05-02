@@ -1,1 +1,0 @@
-/opt/cbi/make/002/private/api/cuda/api_cbi/infographie/cbi_scene_3d/bilat_surface_freeglut_cuda.mk

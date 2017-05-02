@@ -1,1 +1,0 @@
-/opt/cbi/make/002/private/script/tools/printTable.sh

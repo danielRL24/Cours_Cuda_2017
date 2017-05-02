@@ -1,1 +1,0 @@
-/opt/cbi/make/002/private/common/arm_target.mk

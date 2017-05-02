@@ -1,1 +1,0 @@
-/home/arc13/CUDA/toStudent/code/WCuda/Student_Cuda/src/cpp/core/06_MontecarloMultiGPU/host/MontecarloMultiGPU.h

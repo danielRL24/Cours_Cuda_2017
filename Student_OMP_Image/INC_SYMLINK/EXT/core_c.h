@@ -1,1 +1,0 @@
-/opt/api/ext/opencv/310/include/opencv2/core/core_c.h

@@ -1,1 +1,0 @@
-/opt/cbi/make/002/private/script/symlink/symlink_ext_bin_all.sh

@@ -1,1 +1,0 @@
-/opt/api/cbi/infographie/tools/301/Bilat_tools_dll/INC/dllHelper.h

@@ -1,1 +1,0 @@
-/opt/cbi/make/002/private/api/version/api_ext_version.mk

@@ -1,1 +1,0 @@
-/opt/cbi/make/002/private/api/cuda/api_cbi/infographie/cbi_opengl/bilat_opengl_tools_cuda.mk

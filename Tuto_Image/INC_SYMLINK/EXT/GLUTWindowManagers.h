@@ -1,1 +1,0 @@
-/opt/api/cbi/infographie/fenetrage/301/Bilat_Fenetrage_FreeGlut_Tools/INC/GLUTWindowManagers.h

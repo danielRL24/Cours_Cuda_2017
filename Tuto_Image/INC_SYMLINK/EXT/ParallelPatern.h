@@ -1,1 +1,0 @@
-/opt/api/cbi/tools/bilat_tools_omp/301_004/INC/OMP_Tools/header/ParallelPatern.h
